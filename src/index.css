@@ -1,0 +1,255 @@
+@tailwind base;
+
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dark-first palette based on your design */
+  --color-bg: #000020; /* Midnight Blue */
+  --color-panel: #000030; 
+  --color-card: #000040;
+  --primary-start: #4d4dff; 
+  --primary-end: #6666ff; 
+  --color-primary: linear-gradient(
+    90deg,
+    var(--primary-start),
+    var(--primary-end)
+  );
+  --highlight: #8080ff; 
+  --text-primary: #ffffff;
+  /* alias for older code expecting --color-text */
+  --color-text: var(--text-primary);
+  --text-secondary: #a0aec0;
+  --color-success: #22c55e;
+  --color-warning: #facc15;
+  --color-error: #f87171;
+  --divider: #1e293b;
+  --button-hover-glow: rgba(56, 189, 248, 0.3);
+}
+
+.light {
+  /* Optional light theme (kept subtle) */
+  --color-bg: #f8fafc;
+  --color-panel: #ffffff;
+  --color-card: #f1f5f9;
+  --primary-start: #0f766e;
+  --primary-end: #14b8a6;
+  --color-primary: linear-gradient(
+    90deg,
+    var(--primary-start),
+    var(--primary-end)
+  );
+  --highlight: #6c63ff;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --divider: rgba(15, 23, 42, 0.06);
+  --button-hover-glow: rgba(56, 189, 248, 0.12);
+}
+
+/* Body / global */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--text-primary);
+}
+
+/* Panels and cards use consistent styles */
+.panel {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.dark .panel {
+  background-color: rgb(31 41 55);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  border-color: rgb(55 65 81);
+}
+
+/* Cards inside panels */
+.card {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.dark .card {
+  background-color: rgb(31 41 55);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  border-color: rgb(55 65 81);
+}
+
+.card-item {
+  background-color: rgb(249 250 251);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.dark .card-item {
+  background-color: rgba(17 24 39 / 0.5);
+}
+
+.accent-btn {
+  background: var(--primary-start);
+  background-image: var(--color-primary);
+  color: var(--text-primary);
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.4);
+  transition: box-shadow 0.18s ease, transform 0.08s ease;
+}
+
+.accent-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px var(--button-hover-glow);
+}
+
+.muted-text {
+  color: var(--text-secondary);
+}
+
+.status-badge-present {
+  background: rgba(34, 197, 94, 0.08);
+  color: var(--color-success);
+  padding: 4px 8px;
+  border-radius: 9999px;
+}
+
+.status-badge-missing {
+  background: rgba(248, 113, 113, 0.08);
+  color: var(--color-error);
+  padding: 4px 8px;
+  border-radius: 9999px;
+}
+
+.badge-default {
+  background-color: var(--color-card);
+  color: var(--text-primary);
+  border: 1px solid var(--divider);
+  padding: 4px 8px;
+  border-radius: 9999px;
+}
+
+/* small helpers */
+.panel-rounded {
+  border-radius: 0.75rem;
+}
+
+.bg-white {
+  /* keep default Tailwind white so pages that rely on light cards (Home page) render correctly */
+}
+.border-gray-200 {
+  border-color: var(--divider) !important;
+}
+.text-gray-900,
+.text-gray-800,
+.text-gray-700,
+.text-gray-600,
+.text-gray-500 {
+  color: var(--text-secondary) !important;
+}
+.shadow,
+.shadow-lg,
+.shadow-xl,
+.shadow-2xl {
+  /* soften shadow on dark background */
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6) !important;
+}
+.rounded-xl {
+  border-radius: 0.75rem !important;
+}
+
+/* Inputs, selects, textareas: dark styling to avoid white placeholders/fields */
+input,
+textarea,
+select,
+.form-input,
+.input,
+.v-input {
+  background-color: var(--color-card) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--divider) !important;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-secondary) !important;
+  opacity: 1;
+}
+
+/* Make selects consistent */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Buttons that used white backgrounds should follow accent or panel */
+button,
+.btn {
+  color: var(--text-primary);
+}
+
+/* Links/text that relied on gray-900 etc should use our secondary/text colors */
+a {
+  color: var(--primary-start);
+}
+
+/* Ensure placeholders in forms don't show as white boxes */
+.form-control,
+.input,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  background: var(--color-card) !important;
+}
+
+.page-bg {
+  min-height: 100vh;
+  padding: 2.5rem;
+  /* subtle layered background similar to Home.jsx look */
+  background: linear-gradient(
+      180deg,
+      #eaf4ff 0%,
+      rgba(234, 244, 255, 0.6) 28%,
+      transparent 60%
+    ),
+    radial-gradient(
+      800px 300px at 10% 10%,
+      rgba(99, 102, 241, 0.06),
+      transparent 20%
+    );
+  color: var(--text-primary);
+}
+
+/* specific page classes to allow tweaks per page if needed */
+.home-page,
+.sender-page,
+.receiver-page,
+.warehouse-page {
+  background-color: transparent; /* uses .page-bg layered background */
+}
+
+/* keep panels/cards dark so they pop on the lighter page background */
+.panel,
+.card {
+  /* no change here — already uses variables */
+}
+
+/* small optional tweak to ensure full-width look for page content */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
