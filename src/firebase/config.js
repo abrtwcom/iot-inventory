@@ -3,14 +3,12 @@ import { getDatabase } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBCCK1X1mTh9g-urZAmZFi4_nSGOhWSPPc",
-  authDomain: "iot-logistic-kit.firebaseapp.com",
-  databaseURL: "https://iot-logistic-kit-default-rtdb.firebaseio.com",
-  projectId: "iot-logistic-kit",
-  storageBucket: "iot-logistic-kit.firebasestorage.app",
-  messagingSenderId: "319525791741",
-  appId: "1:319525791741:web:ac7835491cb6af4d1f1b94",
-  measurementId: "G-M08RZMJCCN"
+  apiKey: "AIzaSyCfn8sXkHx4wl-dfOVTXeNznyu--G4ydDY",
+  authDomain: "iot-inventory-87709788-95492.firebaseapp.com",
+  projectId: "iot-inventory-87709788-95492",
+  storageBucket: "iot-inventory-87709788-95492.firebasestorage.app",
+  messagingSenderId: "1076687162237",
+  appId: "1:1076687162237:web:aae0d350af69a8d84fda14"
 };
 
 const app = initializeApp(firebaseConfig);

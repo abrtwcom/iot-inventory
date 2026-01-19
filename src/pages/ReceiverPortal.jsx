@@ -6,7 +6,18 @@ import { useAuth } from "../hooks/useAuth";
 import { useProducts } from "../hooks/useProducts";
 import { useRealtimeData } from "../hooks/useRealtimeData";
 import ProductList from "../components/receiver/ProductList";
-import { Radio, Package, ArrowRight, CheckCircle, XCircle, Bluetooth, Shield } from "lucide-react";
+import {
+  Radio,
+  Package,
+  ArrowRight,
+  CheckCircle,
+  XCircle,
+  Bluetooth,
+  Shield,
+  Clock,
+  Smartphone,
+  BadgeCheck,
+} from "lucide-react";
 
 export default function ReceiverPortal() {
   const { user, loading: authLoading } = useAuth();
@@ -16,9 +27,6 @@ export default function ReceiverPortal() {
 
   // Real-time subscriptions
   const { data: allProducts } = useRealtimeData("products");
-  const { data: detections } = useRealtimeData("warehouse/detections");
-  const { data: scanners } = useRealtimeData("warehouse/scanners");
-  // Keep a live view of the current scanner status (ESP32 writes here)
   const { data: currentStatus } = useRealtimeData("warehouse/current_status");
 
   useEffect(() => {
@@ -31,10 +39,6 @@ export default function ReceiverPortal() {
     allProducts?.filter((p) => p.receiver_email === user?.email) || [];
 
   // Auto-sync product.status with warehouse/current_status updates coming from ESP32
-  // This ensures receiver UI updates automatically when the ESP32 reports present/missing.
-  // Inserted: convert currentStatus (array of { id: deviceName, present, last_seen, rssi })
-  // into a map and update any products that changed state.
-  // NOTE: we avoid changing products that are already marked 'received'.
   useEffect(() => {
     if (!currentStatus || currentStatus.length === 0 || !myProducts) return;
 
@@ -46,7 +50,6 @@ export default function ReceiverPortal() {
           return;
 
         const deviceEntry = statusMap.get(product.device_name);
-        // If no entry exists for the device, treat as missing (device not reporting)
         const newStatus =
           deviceEntry && deviceEntry.present ? "present" : "missing";
 
@@ -60,8 +63,7 @@ export default function ReceiverPortal() {
         console.error("Error syncing product status from current_status:", err);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentStatus, allProducts, user]);
+  }, [currentStatus, allProducts, user, myProducts, updateProduct]);
 
   const handleMarkReceived = async (product) => {
     await updateProduct(product.id, {
@@ -75,7 +77,6 @@ export default function ReceiverPortal() {
 
     try {
       // 1. Trigger ESP32 Master to scan all slaves
-      // Set trigger_scan flag in Firebase for ESP32 to detect
       const triggerRef = ref(database, "warehouse/scanner/trigger_scan");
       await update(triggerRef, {
         requested: true,
@@ -83,38 +84,32 @@ export default function ReceiverPortal() {
         requested_at: new Date().toISOString(),
       });
 
-      // Also update scanner status to active
       const scannerStatusRef = ref(database, "warehouse/scanner");
       await update(scannerStatusRef, {
         status: "scanning",
         last_seen: new Date().toISOString(),
       });
 
-      // 2. Wait for ESP32 to complete scan (ESP32 scans all 3 slaves, takes ~15-20 seconds)
-      // Check for new detections every 2 seconds, timeout after 30 seconds
+      // 2. Wait for ESP32 to complete scan (~15-20 seconds)
       let scanComplete = false;
       let attempts = 0;
-      const maxAttempts = 15; // 30 seconds total
-      const scanStartTime = Date.now();
+      const maxAttempts = 15;
 
       while (!scanComplete && attempts < maxAttempts) {
         await new Promise((resolve) => setTimeout(resolve, 2000));
         attempts++;
 
-        // Check if new detections have been added (within last 30 seconds)
         const detectionsRef = ref(database, "warehouse/detections");
         const detectionsSnapshot = await get(detectionsRef);
         const allDetections = detectionsSnapshot.val();
 
         if (allDetections) {
-          // Check for recent detections (within last 30 seconds)
           const recentDetections = Object.values(allDetections).filter(
             (detection) => {
               const detectionTime = detection.timestamp
                 ? parseInt(detection.timestamp)
                 : 0;
-              const timeDiff = Date.now() - detectionTime;
-              return timeDiff < 30000; // Within last 30 seconds
+              return Date.now() - detectionTime < 30000;
             }
           );
 
@@ -124,15 +119,10 @@ export default function ReceiverPortal() {
         }
       }
 
-      // 3. Get current status from warehouse/current_status (most reliable)
+      // 3. Get current status from warehouse/current_status
       const currentStatusRef = ref(database, "warehouse/current_status");
       const currentStatusSnapshot = await get(currentStatusRef);
       const currentStatus = currentStatusSnapshot.val() || {};
-
-      // Also get recent detections for timestamp info
-      const detectionsRef = ref(database, "warehouse/detections");
-      const detectionsSnapshot = await get(detectionsRef);
-      const allDetections = detectionsSnapshot.val() || {};
 
       // Extract detected device names from current_status
       const detectedDevices = new Set();
@@ -152,29 +142,26 @@ export default function ReceiverPortal() {
 
       // 4. Update product statuses based on detected slaves
       for (const product of myProducts) {
-        if (product.status === "received") continue; // Skip already received products
+        if (product.status === "received") continue;
 
         const deviceName = product.device_name;
         const isDetected = detectedDevices.has(deviceName);
 
         let newStatus;
         if (isDetected) {
-          // Device is detected - check if it belongs to this receiver
           if (receiverDeviceMap.has(deviceName)) {
-            newStatus = "present"; // ✅ Correct product detected
+            newStatus = "present";
           } else {
-            newStatus = "irrelevant"; // ⚠️ Detected but not for this receiver
+            newStatus = "irrelevant";
           }
         } else {
-          // Device not detected - if it's for this receiver, mark as missing
           if (product.receiver_email === user.email) {
-            newStatus = "missing"; // ❌ Expected but not found
+            newStatus = "missing";
           } else {
-            newStatus = "irrelevant"; // Not relevant to this receiver
+            newStatus = "irrelevant";
           }
         }
 
-        // Only update if status changed
         if (product.status !== newStatus) {
           await updateProduct(product.id, {
             status: newStatus,
@@ -213,175 +200,196 @@ export default function ReceiverPortal() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 mx-auto" style={{ borderColor: 'var(--primary-start)' }}></div>
-          <p className="mt-4 text-white text-lg">Loading...</p>
+      <div className="page-container">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="loading-spinner mx-auto mb-4"></div>
+            <p style={{ color: "var(--text-secondary)" }}>Loading...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
-      {/* Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-80 h-80 rounded-full opacity-10 blur-3xl"
-             style={{ background: 'var(--color-success)' }}></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-10 blur-3xl"
-             style={{ background: 'var(--highlight)' }}></div>
+    <div className="page-container portal-container">
+      {/* Header */}
+      <div className="header-section">
+        <div
+          className="icon-wrapper mx-auto mb-4"
+          style={{
+            width: "3.5rem",
+            height: "3.5rem",
+            borderRadius: "1rem",
+            background: "var(--color-primary)",
+          }}
+        >
+          <Package size={28} />
+        </div>
+        <h1 className="portal-title">Receiver Portal</h1>
+        <p className="portal-description">Verify incoming packages with Bluetooth scanning and track your deliveries in real-time</p>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 py-10">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 shadow-lg"
-               style={{ background: 'linear-gradient(135deg, #10b981, var(--highlight))' }}>
-            <Package size={40} className="text-white" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-            Receiver Portal
-          </h1>
-          <p className="text-xl max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
-            Verify incoming packages with Bluetooth scanning and track your deliveries in real-time
-          </p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-          <div className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
-               style={{ background: 'var(--color-card)', border: '1px solid var(--divider)' }}>
-            <div className="absolute top-0 right-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Package size={80} />
-            </div>
-            <div className="relative">
-              <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>Total Packages</p>
-              <p className="text-4xl font-bold text-white">{myProducts.length}</p>
-            </div>
-          </div>
-
-          <div className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
-               style={{ background: 'var(--color-card)', border: '1px solid var(--divider)' }}>
-            <div className="absolute top-0 right-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity">
-              <CheckCircle size={80} />
-            </div>
-            <div className="relative">
-              <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>Present</p>
-              <p className="text-4xl font-bold" style={{ color: 'var(--color-success)' }}>{presentCount}</p>
-            </div>
-          </div>
-
-          <div className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
-               style={{ background: 'var(--color-card)', border: '1px solid var(--divider)' }}>
-            <div className="absolute top-0 right-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity">
-              <XCircle size={80} />
-            </div>
-            <div className="relative">
-              <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>Missing</p>
-              <p className="text-4xl font-bold" style={{ color: 'var(--color-error)' }}>{missingCount}</p>
-            </div>
-          </div>
-
-          <div className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
-               style={{ background: 'var(--color-card)', border: '1px solid var(--divider)' }}>
-            <div className="absolute top-0 right-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Shield size={80} />
-            </div>
-            <div className="relative">
-              <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>Received</p>
-              <p className="text-4xl font-bold text-blue-400">{receivedCount}</p>
-            </div>
+      {/* Stats */}
+      <div className="receiver-stats-grid">
+        <div className="stats-card">
+          <div className="number">{myProducts.length}</div>
+          <div className="label flex items-center justify-center gap-2">
+            <Package size={14} />
+            Total
           </div>
         </div>
-
-        {/* How It Works */}
-        <div className="rounded-2xl p-8 mb-10 border"
-             style={{ background: 'var(--color-panel)', borderColor: 'var(--divider)' }}>
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-            <ArrowRight className="text-green-400" size={28} />
-            How It Works
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[
-              { step: '1', title: 'Await Delivery', desc: 'Wait for shipment notification from sender' },
-              { step: '2', title: 'Start Scanner', desc: 'Click "Verify Bluetooth" to scan for devices' },
-              { step: '3', title: 'Verify Items', desc: 'System detects which packages are present' },
-              { step: '4', title: 'Mark Received', desc: 'Confirm and mark packages as received' },
-            ].map((item, idx) => (
-              <div key={idx} className="text-center group">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold text-lg transition-transform group-hover:scale-110"
-                     style={{ background: 'var(--color-success)' }}>
-                  {item.step}
-                </div>
-                <h3 className="font-semibold text-white mb-1">{item.title}</h3>
-                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{item.desc}</p>
-              </div>
-            ))}
+        <div className="stats-card">
+          <div className="number" style={{ color: "var(--color-success)" }}>
+            {presentCount}
+          </div>
+          <div className="label flex items-center justify-center gap-2">
+            <CheckCircle size={14} />
+            Present
           </div>
         </div>
+        <div className="stats-card">
+          <div className="number" style={{ color: "var(--color-error)" }}>
+            {missingCount}
+          </div>
+          <div className="label flex items-center justify-center gap-2">
+            <XCircle size={14} />
+            Missing
+          </div>
+        </div>
+        <div className="stats-card">
+          <div className="number" style={{ color: "var(--primary-start)" }}>
+            {receivedCount}
+          </div>
+          <div className="label flex items-center justify-center gap-2">
+            <Shield size={14} />
+            Received
+          </div>
+        </div>
+      </div>
 
-        {/* Bluetooth Verification Section */}
-        <div className="rounded-2xl p-8 mb-10 border"
-             style={{ background: 'var(--color-panel)', borderColor: 'var(--divider)' }}>
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div className="flex items-start gap-5">
-              <div className="flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center"
-                   style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>
-                <Bluetooth size={32} className="text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-2">Bluetooth Verification</h2>
-                <p className="max-w-xl" style={{ color: 'var(--text-secondary)' }}>
-                  Verify which packages are physically present using Bluetooth scanning. 
-                  The Master ESP32 will scan all slave devices to detect your packages in real-time.
-                </p>
-                <div className="flex flex-wrap gap-3 mt-4">
-                  <span className="status-badge-present font-medium flex items-center gap-1">
-                    <CheckCircle size={14} /> {presentCount} Present
-                  </span>
-                  <span className="status-badge-missing font-medium flex items-center gap-1">
-                    <XCircle size={14} /> {missingCount} Missing
-                  </span>
+      {/* How It Works */}
+      <div className="card how-it-works-card">
+        <h2 className="section-title" style={{ justifyContent: "center" }}>
+          How It Works
+        </h2>
+        <div className="steps-grid">
+          {[
+            {
+              step: "1",
+              title: "Await Delivery",
+              desc: "Wait for shipment notification from sender",
+              icon: Clock,
+            },
+            {
+              step: "2",
+              title: "Start Scanner",
+              desc: 'Click "Verify Bluetooth" to scan for devices',
+              icon: Bluetooth,
+            },
+            {
+              step: "3",
+              title: "Verify Items",
+              desc: "System detects which packages are present",
+              icon: BadgeCheck,
+            },
+            {
+              step: "4",
+              title: "Mark Received",
+              desc: "Confirm and mark packages as received",
+              icon: CheckCircle,
+            },
+          ].map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div key={idx} className="step-card">
+                <div className="step-number">{item.step}</div>
+                <div
+                  className="icon-wrapper mx-auto mb-3"
+                  style={{
+                    width: "2rem",
+                    height: "2rem",
+                    borderRadius: "0.5rem",
+                    background: "var(--color-primary)",
+                  }}
+                >
+                  <Icon size={14} />
                 </div>
+                <h4 style={{ fontSize: "0.75rem" }}>{item.title}</h4>
+                <p style={{ fontSize: "0.65rem" }}>{item.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Bluetooth Verification Section */}
+      <div className="card verification-card">
+        <div className="verification-content">
+          <div className="flex items-start gap-4">
+            <div
+              className="icon-wrapper flex-shrink-0"
+              style={{
+                width: "3rem",
+                height: "3rem",
+                borderRadius: "0.75rem",
+                background: "var(--color-primary)",
+                boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)",
+              }}
+            >
+              <Bluetooth size={20} />
+            </div>
+            <div className="verification-text">
+              <h2 className="text-lg font-bold text-white mb-2">Bluetooth Verification</h2>
+              <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }}>
+                Verify which packages are physically present using Bluetooth scanning. 
+                The Master ESP32 will scan all slave devices to detect your packages in real-time.
+              </p>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <span className="badge badge-present">
+                  <CheckCircle size={12} className="mr-1" />
+                  {presentCount} Present
+                </span>
+                <span className="badge badge-missing">
+                  <XCircle size={12} className="mr-1" />
+                  {missingCount} Missing
+                </span>
               </div>
             </div>
+          </div>
 
-            <div className="flex-shrink-0">
-              {isScanning && (
-                <div className="flex items-center gap-2 mb-3 px-4 py-2 rounded-lg"
-                     style={{ background: 'rgba(16, 185, 129, 0.1)' }}>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2"
-                       style={{ borderColor: 'var(--color-success)' }}></div>
-                  <span className="text-sm font-medium" style={{ color: 'var(--color-success)' }}>
-                    Scanning... Please wait (up to 30s)
-                  </span>
-                </div>
-              )}
-              <button
-                onClick={simulateBluetoothVerification}
-                disabled={isScanning}
-                className="w-full lg:w-auto px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95"
-                style={{ 
-                  background: isScanning 
-                    ? 'var(--divider)' 
-                    : 'linear-gradient(135deg, #10b981, #059669)',
-                  boxShadow: isScanning ? 'none' : '0 8px 32px rgba(16, 185, 129, 0.3)'
-                }}
+          <div className="verification-action">
+            {isScanning && (
+              <div
+                className="flex items-center gap-2 mb-3 px-3 py-2 rounded-lg"
+                style={{ background: "rgba(34, 197, 94, 0.1)" }}
               >
-                <Radio size={22} className={isScanning ? "animate-pulse" : ""} />
-                {isScanning ? "Scanning..." : "Verify Bluetooth"}
-              </button>
-            </div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-500"></div>
+                <span className="text-sm font-medium" style={{ color: "var(--color-success)" }}>
+                  Scanning...
+                </span>
+              </div>
+            )}
+            <button
+              onClick={simulateBluetoothVerification}
+              disabled={isScanning}
+              className="btn-primary flex items-center gap-2"
+              style={{ boxShadow: "0 4px 15px rgba(59, 130, 246, 0.4)" }}
+            >
+              <Radio size={18} className={isScanning ? "animate-pulse" : ""} />
+              {isScanning ? "Scanning..." : "Verify Bluetooth"}
+            </button>
           </div>
         </div>
-
-        {/* Product List */}
-        <ProductList
-          products={myProducts}
-          onMarkReceived={handleMarkReceived}
-          currentUserEmail={user?.email}
-        />
       </div>
+
+      {/* Product List */}
+      <ProductList
+        products={myProducts}
+        onMarkReceived={handleMarkReceived}
+        currentUserEmail={user?.email}
+      />
     </div>
   );
 }
+
