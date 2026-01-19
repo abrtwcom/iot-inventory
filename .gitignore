@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Firebase
+.firebase/
+.firebasecache
+
+# Build outputs
+*.local
+
+# OS files
+Thumbs.db
+

@@ -1,7 +1,6 @@
 {
   "projects": {
-    "default": "iot-logistic-kit"
-  },
-  "targets": {},
-  "etags": {}
+    "default": "your-project-id"
+  }
 }
+
