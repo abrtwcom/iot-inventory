@@ -1,6 +1,7 @@
 # IoT Logistics Tracking System
 
 A real-time warehouse package tracking system using ESP32 BLE beacons, React, and Firebase.
+https://iot-inventory-87709788-95492.firebaseapp.com/
 
 ## Features
 
@@ -11,12 +12,15 @@ A real-time warehouse package tracking system using ESP32 BLE beacons, React, an
 - **Responsive UI**: Modern, responsive interface built with React and Tailwind CSS
 
 ## Tech Stack
+<img width="1904" height="924" alt="Screenshot From 2026-01-19 19-56-42" src="https://github.com/user-attachments/assets/56a1f6e0-3cc1-493b-b498-130d4244f99a" />
 
 - **Frontend**: React 19 + Vite
 - **Styling**: Tailwind CSS
 - **Backend**: Firebase (Realtime Database, Authentication)
-- **Routing**: React Router DOM
+- **Routing**: React Router DOM<img width="1904" height="924" alt="Screenshot From 2026-01-19 19-57-05" src="https://github.com/user-attachments/assets/7ac858f9-3d53-4c95-a3a7-feac0d6989ec" />
+
 - **Icons**: Lucide React
+<img width="1920" height="1080" alt="Screenshot From 2026-01-20 19-52-12" src="https://github.com/user-attachments/assets/5254df73-f764-4c44-a488-517ce4ad4c1b" />
 
 ## Getting Started
 
