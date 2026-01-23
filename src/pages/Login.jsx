@@ -57,7 +57,7 @@ export default function Login() {
       <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-          <p className="text-gray-600">{mode === 'signin' ? 'Sign in to IoT Logistics System' : 'Create your account'}</p>
+          <p className="text-gray-600">{mode === 'signin' ? 'Sign in to WareHub' : 'Create your account'}</p>
         </div>
 
         {error && (
@@ -70,14 +70,14 @@ export default function Login() {
           <button
             type="button"
             onClick={() => setMode('signin')}
-            className={`py-2 rounded-lg border text-sm font-medium ${mode==='signin' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'}`}
+            className={`py-2 rounded-lg border text-sm font-medium ${mode === 'signin' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'}`}
           >
             Sign In
           </button>
           <button
             type="button"
             onClick={() => setMode('signup')}
-            className={`py-2 rounded-lg border text-sm font-medium ${mode==='signup' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'}`}
+            className={`py-2 rounded-lg border text-sm font-medium ${mode === 'signup' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'}`}
           >
             Sign Up
           </button>

@@ -25,9 +25,12 @@ const Sidebar = () => {
         style={{ borderColor: "var(--divider)", borderBottomWidth: 1 }}
       >
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-xl font-bold">IoT Logistics</h1>
-            <p className="text-sm text-gray-400 mt-1">Tracking System</p>
+          <div className="flex items-center gap-2">
+            <img src="/src/assets/logo.png" alt="WareHub" className="h-8 w-auto" />
+            <div>
+              <h1 className="text-xl font-bold">WareHub</h1>
+              <p className="text-sm text-gray-400 mt-1">Status Monitor</p>
+            </div>
           </div>
         </div>
         {/* Theme is fixed to dark by default - ThemeToggle removed */}
@@ -41,17 +44,16 @@ const Sidebar = () => {
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                    isActive(item.path)
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive(item.path)
                       ? "text-white"
                       : "text-gray-300 hover:bg-gray-800 hover:text-white"
-                  }`}
+                    }`}
                   style={
                     isActive(item.path)
                       ? {
-                          backgroundImage: "var(--color-primary)",
-                          boxShadow: "0 8px 20px rgba(2,6,23,0.4)",
-                        }
+                        backgroundImage: "var(--color-primary)",
+                        boxShadow: "0 8px 20px rgba(2,6,23,0.4)",
+                      }
                       : {}
                   }
                 >

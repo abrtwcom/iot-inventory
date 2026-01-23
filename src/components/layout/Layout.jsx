@@ -17,19 +17,22 @@ export default function Layout() {
         >
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        <span className="mobile-header-title">IoT Logistics</span>
+        <div className="mobile-header-title flex items-center gap-2">
+          <img src="/src/assets/logo.png" alt="WareHub" className="h-6 w-auto" />
+          <span>WareHub</span>
+        </div>
       </header>
 
       {/* Mobile Overlay */}
       {sidebarOpen && (
-        <div 
-          className="sidebar-overlay" 
+        <div
+          className="sidebar-overlay"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
+
       <main className="main-content">
         <Outlet />
       </main>

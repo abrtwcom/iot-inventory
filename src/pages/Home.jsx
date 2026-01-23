@@ -79,9 +79,9 @@ export default function Home() {
           <span>Powered by ESP32 BLE Technology</span>
         </div>
         <h1 className="hero-title">
-          <span>IoT Logistics</span>
+          <span>WareHub</span>
           <br />
-          Tracking System
+          Smart Inventory & Logistics Platform
         </h1>
         <p className="hero-description">
           Revolutionize your warehouse inventory operations with real-time package
@@ -204,7 +204,7 @@ export default function Home() {
 
       {/* Footer */}
       <div className="footer">
-        <p>© 2024 IoT Logistics Tracking System. All rights reserved.</p>
+        <p>© 2024 WareHub. All rights reserved.</p>
       </div>
     </div>
   );

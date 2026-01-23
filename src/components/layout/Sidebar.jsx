@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, Package, Truck, Warehouse, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import AppLogo from "../AppLogo";
 
 export default function Sidebar({ isOpen = false, onClose }) {
   const location = useLocation();
@@ -31,56 +32,19 @@ export default function Sidebar({ isOpen = false, onClose }) {
     <>
       {/* Sidebar */}
       <div className={`sidebar ${isOpen ? "sidebar-open" : ""} ${isCollapsed ? "sidebar-collapsed" : ""}`}>
-        
+
         {/* Logo Section */}
         <div
           className="p-4 border-b flex items-center justify-between"
           style={{ borderColor: "var(--divider)", borderBottomWidth: 1 }}
         >
           <div className="flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{
-                background: "var(--color-primary)",
-                boxShadow: "0 4px 15px rgba(59, 130, 246, 0.4)",
-              }}
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L2 7L12 12L22 7L12 2Z"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M2 17L12 22L22 17"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M2 12L12 17L22 12"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <div className="sidebar-text">
-              <h1 className="text-lg font-bold text-white">IoT Logistics</h1>
-              <p className="text-xs text-gray-400">Tracking System</p>
-            </div>
+            <AppLogo
+              iconClass="w-8 h-8 md:w-10 md:h-10"
+              textClass="text-lg font-bold text-white sidebar-text"
+            />
           </div>
-          
+
           {/* Collapse Toggle */}
           <button
             onClick={toggleCollapse}
