@@ -2,7 +2,9 @@
 
 A real-time warehouse package tracking system using ESP32 BLE beacons, React, and Firebase.
 
-https://iot-inventory-87709788-95492.firebaseapp.com/
+to know more visit this blog 
+https://medium.com/@amitbartwal008/warehouse-automation-how-iot-real-time-tracking-are-transforming-logistics-669beeb8fb8a
+
 
 ## Features
 
