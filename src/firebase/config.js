@@ -1,4 +1,5 @@
-import { initializeApp } from 'firebase/app';
+// Prevent multiple initializations
+import { getApps, initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 
@@ -13,7 +14,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abc123"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 export const database = getDatabase(app);
 export const auth = getAuth(app);
 export default app;

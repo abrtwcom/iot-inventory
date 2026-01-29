@@ -7,7 +7,12 @@ import AppLogo from "../AppLogo";
 export default function Sidebar({ isOpen = false, onClose }) {
   const location = useLocation();
   const { user, logout } = useAuth();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Mobile drawer is controlled by isOpen
+  // Desktop sidebar collapses/expands on hover
+  // We consider it "collapsed" on desktop when NOT hovered
+  // On mobile, isOpen determines visibility
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },
@@ -24,35 +29,26 @@ export default function Sidebar({ isOpen = false, onClose }) {
     }
   };
 
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-
   return (
     <>
       {/* Sidebar */}
-      <div className={`sidebar ${isOpen ? "sidebar-open" : ""} ${isCollapsed ? "sidebar-collapsed" : ""}`}>
+      <div
+        className={`sidebar ${isOpen ? "sidebar-open" : ""}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
 
         {/* Logo Section */}
         <div
-          className="p-4 border-b flex items-center justify-between"
+          className="p-4 border-b flex items-center justify-between logo-section"
           style={{ borderColor: "var(--divider)", borderBottomWidth: 1 }}
         >
           <div className="flex items-center gap-3">
             <AppLogo
-              iconClass="w-8 h-8 md:w-10 md:h-10"
-              textClass="text-lg font-bold text-white sidebar-text"
+              iconClass="w-10 h-10 md:w-14 md:h-14"
+              textClass="text-xl font-semibold text-white sidebar-text tracking-wide"
             />
           </div>
-
-          {/* Collapse Toggle */}
-          <button
-            onClick={toggleCollapse}
-            className="collapse-btn"
-            title={isCollapsed ? "Expand sidebar" : "Minimize sidebar"}
-          >
-            {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-          </button>
         </div>
 
         {/* Navigation */}
@@ -67,7 +63,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
                     onClick={handleNavClick}
                     className={`nav-item ${isActive(item.path) ? "active" : ""}`}
                   >
-                    <Icon size={20} />
+                    <Icon size={22} className="flex-shrink-0" />
                     <span className="sidebar-text">{item.label}</span>
                   </Link>
                 </li>
@@ -88,7 +84,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
           >
             <div className="flex items-center gap-3 mb-3">
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
                 style={{
                   background: "var(--color-primary)",
                 }}
@@ -110,7 +106,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
               onClick={logout}
               className="nav-item logout-btn"
             >
-              <LogOut size={20} />
+              <LogOut size={22} className="flex-shrink-0" />
               <span className="sidebar-text">Logout</span>
             </button>
           </div>
@@ -119,26 +115,43 @@ export default function Sidebar({ isOpen = false, onClose }) {
 
       <style>{`
         .sidebar-text {
-          transition: opacity 0.2s ease;
+          white-space: nowrap;
+          opacity: 1;
+          transition: opacity 0.2s ease, transform 0.2s ease;
+          transform: translateX(0);
         }
         
-        .collapse-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 32px;
-          height: 32px;
-          border-radius: 6px;
-          background: transparent;
-          border: none;
-          color: var(--text-secondary);
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        
-        .collapse-btn:hover {
-          background: var(--divider);
-          color: var(--text-primary);
+        /* Desktop Hover Behavior */
+        @media (min-width: 768px) {
+          .sidebar {
+            width: 64px;
+            transition: width 0.25s ease;
+            overflow: hidden;
+          }
+          
+          .sidebar:hover {
+            width: 220px;
+          }
+
+          /* Hide text when not hovered (collapsed state) */
+          .sidebar:not(:hover) .sidebar-text {
+            opacity: 0;
+            transform: translateX(-10px);
+            pointer-events: none;
+            width: 0;
+          }
+
+           /* Center icons when collapsed */
+          .sidebar:not(:hover) .nav-item,
+          .sidebar:not(:hover) .logo-section {
+             justify-content: center;
+             padding-left: 0;
+             padding-right: 0;
+          }
+
+          .sidebar:not(:hover) .nav-item {
+             padding: 0.75rem 0;
+          }
         }
         
         .nav-item {
@@ -151,6 +164,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
           text-decoration: none;
           transition: all 0.2s ease;
           width: 100%;
+          position: relative;
         }
         
         .nav-item:hover {
@@ -159,9 +173,10 @@ export default function Sidebar({ isOpen = false, onClose }) {
         }
         
         .nav-item.active {
-          background: var(--color-primary);
-          color: white;
-          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+          background: rgba(59, 130, 246, 0.1);
+          color: var(--primary-start);
+          box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+          border-left: 3px solid var(--primary-start);
         }
         
         .logout-btn {
@@ -172,61 +187,6 @@ export default function Sidebar({ isOpen = false, onClose }) {
         .logout-btn:hover {
           background: var(--divider);
           color: var(--text-primary);
-        }
-        
-        /* Collapsed state */
-        .sidebar-collapsed .sidebar-text {
-          opacity: 0;
-          width: 0;
-          overflow: hidden;
-        }
-        
-        .sidebar-collapsed {
-          width: 80px !important;
-        }
-        
-        .sidebar-collapsed .collapse-btn {
-          position: absolute;
-          right: -12px;
-          top: 5rem;
-          background: var(--color-panel);
-          border: 1px solid var(--divider);
-          border-radius: 50%;
-          z-index: 10;
-        }
-        
-        .sidebar-collapsed .nav-item {
-          justify-content: center;
-          padding: 0.75rem;
-        }
-        
-        .sidebar-collapsed .p-4.border-b,
-        .sidebar-collapsed .p-4.border-t {
-          padding: 1rem !important;
-        }
-        
-        .sidebar-collapsed .flex.items-center.gap-3 {
-          justify-content: center;
-        }
-        
-        @media (max-width: 767px) {
-          .sidebar-collapsed {
-            width: var(--sidebar-width) !important;
-          }
-          
-          .sidebar-collapsed .sidebar-text {
-            opacity: 1;
-            width: auto;
-          }
-          
-          .sidebar-collapsed .nav-item {
-            justify-content: flex-start;
-            padding: 0.75rem 1rem;
-          }
-          
-          .sidebar-collapsed .collapse-btn {
-            display: none;
-          }
         }
       `}</style>
     </>
