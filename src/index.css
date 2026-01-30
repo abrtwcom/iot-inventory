@@ -3,27 +3,51 @@
 @tailwind utilities;
 
 :root {
-  /* Dark-first palette - Midnight Blue Theme */
-  --color-bg: #000020;
-  --color-panel: #0a0a2e;
-  --color-card: #0f0f3d;
-  --color-input: #151550;
+  /* Premium Dark Industrial Tech Theme */
+  --color-bg: #020617;
+  /* Slate 950 - Deep, professional dark */
+  --color-bg-secondary: #0f172a;
+  /* Slate 900 */
+  --color-panel: #0f172a;
+  /* Unified Sidebar */
+  --color-card: #1e293b;
+  /* Slate 800 - Clean card contrast */
+  --color-input: #0f172a;
   --primary-start: #3b82f6;
-  --primary-end: #8b5cf6;
+  /* Blue 500 - Electric, Visible */
+  --primary-end: #6366f1;
+  /* Indigo 500 - Cool Gradient */
   --color-primary: linear-gradient(135deg, var(--primary-start), var(--primary-end));
-  --highlight: #6366f1;
-  --text-primary: #ffffff;
-  --text-secondary: #5e6d83;
+  --highlight: #38bdf8;
+  /* Sky 400 - Safety/Tech Blue */
+  --text-primary: #f8fafc;
+  /* Slate 50 */
+  --text-primary-dark: #f8fafc;
+  --text-secondary: #94a3b8;
+  /* Slate 400 */
   --text-muted: #64748b;
-  --color-success: #22c55e;
+  /* Slate 500 */
+  --color-success: #10b981;
+  /* Emerald 500 - Clear 'Go' signal */
   --color-warning: #f59e0b;
+  /* Amber 500 - Warning signal */
   --color-error: #ef4444;
-  --divider: #1e1b4b;
-  --border-color: #312e81;
+  /* Red 500 */
+  --divider: rgba(255, 255, 255, 0.08);
+  --divider-dark: rgba(0, 0, 0, 0.3);
+  --border-color: rgba(255, 255, 255, 0.08);
+  /* Subtle tech borders */
+  --border-color-dark: #334155;
   --sidebar-width: 280px;
+  --sidebar-collapsed: 80px;
 }
 
-/* Reset and base styles */
+/* Reset and base styles - Increased base font size for better readability */
+html {
+  font-size: 18px;
+  /* 112.5% of 16px */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -51,7 +75,7 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg);
+  background: var(--color-bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -664,31 +688,34 @@ button {
 .btn-primary {
   background: var(--color-primary);
   color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  font-size: 1rem;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
 }
 
 .btn-secondary {
   background: var(--color-card);
   color: var(--text-primary);
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
   font-weight: 600;
-  border: 1px solid var(--divider);
+  border: 2px solid var(--divider);
   transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
 .btn-secondary:hover {
-  background: var(--divider);
+  background: var(--color-bg-secondary);
   border-color: var(--border-color);
+  transform: translateY(-2px);
 }
 
 /* Card styles */
@@ -696,13 +723,15 @@ button {
   background: var(--color-card);
   border: 1px solid var(--divider);
   border-radius: 1rem;
-  padding: 1.5rem;
+  padding: 2rem;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .card:hover {
-  border-color: var(--border-color);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  border-color: var(--primary-start);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.12);
+  transform: translateY(-4px);
 }
 
 /* Status badges */
@@ -816,14 +845,15 @@ button {
 
 .step-card {
   backdrop-filter: blur(12px);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 14px;
-  padding: 2rem;
+  background: var(--color-card);
+  border: 1px solid var(--divider);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   height: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .step-card::before {
@@ -833,14 +863,14 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.02) 0%, transparent 100%);
   pointer-events: none;
 }
 
 .step-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 48px rgba(59, 130, 246, 0.12);
+  border-color: var(--primary-start);
 }
 
 .step-number {
@@ -849,7 +879,7 @@ button {
   right: -10px;
   font-size: 5rem;
   font-weight: 800;
-  color: rgba(255, 255, 255, 0.02);
+  color: rgba(59, 130, 246, 0.06);
   line-height: 1;
   pointer-events: none;
 }
@@ -862,8 +892,8 @@ button {
 
 /* Sidebar overrides */
 .sidebar {
-  background: var(--color-panel);
-  border-right: 1px solid var(--divider);
+  background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+  border-right: 1px solid var(--divider-dark);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -871,7 +901,8 @@ button {
   left: 0;
   top: 0;
   z-index: 50;
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
 }
 
 .sidebar-open {
@@ -881,13 +912,13 @@ button {
 /* Page container adjust for flexible sidebar */
 @media (min-width: 768px) {
   .page-container {
-    padding-left: calc(64px + 2rem) !important;
+    padding-left: calc(80px + 2rem) !important;
     /* Default collapsed width + gap */
     transition: padding-left 0.25s ease;
   }
 
   .main-content {
-    margin-left: 64px;
+    margin-left: 80px;
     transition: margin-left 0.25s ease;
   }
 }
@@ -1060,8 +1091,6 @@ button {
     left: 0;
     height: 100vh;
     width: var(--sidebar-width);
-    background: var(--color-panel);
-    border-right: 1px solid var(--divider);
     z-index: 50;
     transform: none;
   }
@@ -1072,8 +1101,8 @@ button {
   min-height: 100vh;
   padding: 2rem;
   background:
-    radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
     var(--color-bg);
 }
 
@@ -1232,67 +1261,76 @@ button {
 .stats-card {
   background: var(--color-card);
   border: 1px solid var(--divider);
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: 1.25rem;
+  padding: 2rem;
   text-align: center;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .stats-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-color);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transform: translateY(-6px);
+  border-color: var(--primary-start);
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.15);
 }
 
 .stats-card .number {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 700;
   background: var(--color-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  line-height: 1;
 }
 
 .stats-card .label {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
+  font-weight: 500;
 }
 
 /* Portal card */
 .portal-card {
   background: var(--color-card);
   border: 1px solid var(--divider);
-  border-radius: 1.25rem;
-  padding: 2rem;
-  transition: all 0.3s ease;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
 }
 
 .portal-card:hover {
   transform: translateY(-8px);
   border-color: var(--primary-start);
-  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 16px 48px rgba(59, 130, 246, 0.15);
 }
 
 .portal-card .icon-wrapper {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 1rem;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1.25rem;
   background: var(--color-primary);
   margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
 .portal-card h3 {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .portal-card p {
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 /* Step card */

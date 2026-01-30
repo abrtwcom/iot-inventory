@@ -63,7 +63,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
                     onClick={handleNavClick}
                     className={`nav-item ${isActive(item.path) ? "active" : ""}`}
                   >
-                    <Icon size={22} className="flex-shrink-0" />
+                    <Icon size={24} className="flex-shrink-0" />
                     <span className="sidebar-text">{item.label}</span>
                   </Link>
                 </li>
@@ -106,7 +106,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
               onClick={logout}
               className="nav-item logout-btn"
             >
-              <LogOut size={22} className="flex-shrink-0" />
+              <LogOut size={24} className="flex-shrink-0" />
               <span className="sidebar-text">Logout</span>
             </button>
           </div>
@@ -124,13 +124,13 @@ export default function Sidebar({ isOpen = false, onClose }) {
         /* Desktop Hover Behavior */
         @media (min-width: 768px) {
           .sidebar {
-            width: 64px;
-            transition: width 0.25s ease;
+            width: 80px;
+            transition: width 0.3s ease;
             overflow: hidden;
           }
           
           .sidebar:hover {
-            width: 220px;
+            width: 280px;
           }
 
           /* Hide text when not hovered (collapsed state) */
@@ -150,16 +150,16 @@ export default function Sidebar({ isOpen = false, onClose }) {
           }
 
           .sidebar:not(:hover) .nav-item {
-             padding: 0.75rem 0;
+             padding: 0.875rem 0;
           }
         }
         
         .nav-item {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem 1rem;
-          border-radius: 0.5rem;
+          gap: 1rem;
+          padding: 0.875rem 1rem;
+          border-radius: 0.625rem;
           color: var(--text-secondary);
           text-decoration: none;
           transition: all 0.2s ease;
@@ -168,14 +168,14 @@ export default function Sidebar({ isOpen = false, onClose }) {
         }
         
         .nav-item:hover {
-          background: var(--divider);
-          color: var(--text-primary);
+          background: var(--divider-dark);
+          color: var(--text-primary-dark);
         }
         
         .nav-item.active {
-          background: rgba(59, 130, 246, 0.1);
+          background: rgba(59, 130, 246, 0.15);
           color: var(--primary-start);
-          box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+          box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
           border-left: 3px solid var(--primary-start);
         }
         
@@ -185,8 +185,8 @@ export default function Sidebar({ isOpen = false, onClose }) {
         }
         
         .logout-btn:hover {
-          background: var(--divider);
-          color: var(--text-primary);
+          background: var(--divider-dark);
+          color: var(--text-primary-dark);
         }
       `}</style>
     </>
