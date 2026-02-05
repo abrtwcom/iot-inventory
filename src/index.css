@@ -4,42 +4,39 @@
 
 :root {
   /* Premium Dark Industrial Tech Theme */
-  --color-bg: #020617;
-  /* Slate 950 - Deep, professional dark */
-  --color-bg-secondary: #0f172a;
+  --color-bg: #0f172a;
   /* Slate 900 */
-  --color-panel: #0f172a;
-  /* Unified Sidebar */
-  --color-card: #1e293b;
-  /* Slate 800 - Clean card contrast */
-  --color-input: #0f172a;
+  --color-bg-secondary: #1e293b;
+  /* Slate 800 */
+  --color-panel: #1e293b;
+  /* Slate 800 */
+  --color-card: rgba(30, 41, 59, 0.7);
+  /* Glassy Slate 800 */
+
+  /* Sidebar Specifics */
+  --sidebar-bg: #020617;
+  /* Slate 950 - Very Dark for contrast */
+  --sidebar-width: 280px;
+  --sidebar-collapsed: 88px;
+  /* Slightly wider for larger icons */
+
   --primary-start: #3b82f6;
-  /* Blue 500 - Electric, Visible */
+  /* Blue 500 */
   --primary-end: #6366f1;
-  /* Indigo 500 - Cool Gradient */
+  /* Indigo 500 */
   --color-primary: linear-gradient(135deg, var(--primary-start), var(--primary-end));
-  --highlight: #38bdf8;
-  /* Sky 400 - Safety/Tech Blue */
+
   --text-primary: #f8fafc;
-  /* Slate 50 */
-  --text-primary-dark: #f8fafc;
   --text-secondary: #94a3b8;
-  /* Slate 400 */
   --text-muted: #64748b;
-  /* Slate 500 */
+
   --color-success: #10b981;
-  /* Emerald 500 - Clear 'Go' signal */
   --color-warning: #f59e0b;
-  /* Amber 500 - Warning signal */
   --color-error: #ef4444;
-  /* Red 500 */
+
   --divider: rgba(255, 255, 255, 0.08);
   --divider-dark: rgba(0, 0, 0, 0.3);
-  --border-color: rgba(255, 255, 255, 0.08);
-  /* Subtle tech borders */
-  --border-color-dark: #334155;
-  --sidebar-width: 280px;
-  --sidebar-collapsed: 80px;
+  --border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Reset and base styles - Increased base font size for better readability */

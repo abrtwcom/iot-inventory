@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Package, Truck, Warehouse, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, Package, Truck, Warehouse, LogOut } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import AppLogo from "../AppLogo";
 
@@ -8,11 +8,6 @@ export default function Sidebar({ isOpen = false, onClose }) {
   const location = useLocation();
   const { user, logout } = useAuth();
   const [isHovered, setIsHovered] = useState(false);
-
-  // Mobile drawer is controlled by isOpen
-  // Desktop sidebar collapses/expands on hover
-  // We consider it "collapsed" on desktop when NOT hovered
-  // On mobile, isOpen determines visibility
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },
@@ -24,171 +19,95 @@ export default function Sidebar({ isOpen = false, onClose }) {
   const isActive = (path) => location.pathname === path;
 
   const handleNavClick = () => {
-    if (onClose) {
-      onClose();
-    }
+    if (onClose) onClose();
   };
 
   return (
     <>
-      {/* Sidebar */}
-      <div
-        className={`sidebar ${isOpen ? "sidebar-open" : ""}`}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-[var(--sidebar-bg)] border-r border-[var(--divider)] transition-all duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          }`}
+        style={{
+          width: isHovered ? "var(--sidebar-width)" : "var(--sidebar-collapsed)",
+        }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-
         {/* Logo Section */}
-        <div
-          className="p-4 border-b flex items-center justify-between logo-section"
-          style={{ borderColor: "var(--divider)", borderBottomWidth: 1 }}
-        >
-          <div className="flex items-center gap-3">
-            <AppLogo
-              iconClass="w-10 h-10 md:w-14 md:h-14"
-              textClass="text-xl font-semibold text-white sidebar-text tracking-wide"
-            />
+        <div className="h-20 flex items-center justify-center border-b border-[var(--divider)] overflow-hidden">
+          {/* We keep the logo centered or adapt based on hover */}
+          <div className="flex items-center gap-3 transition-all duration-300">
+            <div className="flex-shrink-0">
+              <AppLogo iconClass="w-10 h-10" textClass={isHovered ? "block ml-2 text-xl font-bold" : "hidden"} />
+            </div>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4" style={{ marginTop: "0.5rem" }}>
-          <ul className="space-y-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    onClick={handleNavClick}
-                    className={`nav-item ${isActive(item.path) ? "active" : ""}`}
-                  >
-                    <Icon size={24} className="flex-shrink-0" />
-                    <span className="sidebar-text">{item.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+        <nav className="flex-1 py-6 px-3 space-y-2 overflow-y-auto overflow-x-hidden">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.path);
+
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={handleNavClick}
+                className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group relative ${active
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-900/40"
+                    : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                  }`}
+              >
+                <div className="flex-shrink-0 flex items-center justify-center w-8">
+                  <Icon size={28} className={`transition-transform duration-300 ${active ? "opacity-100" : "opacity-80 group-hover:opacity-100 group-hover:scale-110"}`} />
+                </div>
+
+                <span
+                  className={`whitespace-nowrap font-medium text-base transition-all duration-300 origin-left ${isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4 w-0 overflow-hidden"
+                    }`}
+                >
+                  {item.label}
+                </span>
+
+                {/* Tooltip for collapsed state (optional but nice) */}
+                {!isHovered && (
+                  <div className="absolute left-[calc(100%+10px)] top-1/2 -translate-y-1/2 px-3 py-1.5 bg-slate-800 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 shadow-xl z-50 whitespace-nowrap border border-slate-700">
+                    {item.label}
+                  </div>
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* User section */}
+        {/* User Profile / Logout */}
         {user && (
-          <div
-            className="p-4 border-t"
-            style={{
-              borderColor: "var(--divider)",
-              borderTopWidth: 1,
-              background: "var(--color-panel)",
-            }}
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
-                style={{
-                  background: "var(--color-primary)",
-                }}
-              >
-                {user.email?.charAt(0).toUpperCase() || "U"}
-              </div>
-              <div className="sidebar-text flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">
-                  {user.email}
-                </p>
-                {user.role && (
-                  <p className="text-xs text-gray-400 capitalize">
-                    {user.role}
-                  </p>
-                )}
-              </div>
-            </div>
+          <div className="p-3 border-t border-[var(--divider)]">
             <button
               onClick={logout}
-              className="nav-item logout-btn"
+              className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200 group relative ${!isHovered ? "justify-center" : ""
+                }`}
             >
-              <LogOut size={24} className="flex-shrink-0" />
-              <span className="sidebar-text">Logout</span>
+              <div className="flex-shrink-0 flex items-center justify-center w-8">
+                <LogOut size={26} />
+              </div>
+              <span
+                className={`whitespace-nowrap font-medium text-base transition-all duration-300 origin-left ${isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4 w-0 overflow-hidden"
+                  }`}
+              >
+                Logout
+              </span>
             </button>
+            {isHovered && (
+              <div className="mt-4 px-4 pb-2 animate-fadeIn">
+                <div className="text-xs text-slate-500 uppercase font-semibold tracking-wider mb-1">Signed in as</div>
+                <div className="text-sm font-medium text-white truncate">{user.email}</div>
+              </div>
+            )}
           </div>
         )}
-      </div>
-
-      <style>{`
-        .sidebar-text {
-          white-space: nowrap;
-          opacity: 1;
-          transition: opacity 0.2s ease, transform 0.2s ease;
-          transform: translateX(0);
-        }
-        
-        /* Desktop Hover Behavior */
-        @media (min-width: 768px) {
-          .sidebar {
-            width: 80px;
-            transition: width 0.3s ease;
-            overflow: hidden;
-          }
-          
-          .sidebar:hover {
-            width: 280px;
-          }
-
-          /* Hide text when not hovered (collapsed state) */
-          .sidebar:not(:hover) .sidebar-text {
-            opacity: 0;
-            transform: translateX(-10px);
-            pointer-events: none;
-            width: 0;
-          }
-
-           /* Center icons when collapsed */
-          .sidebar:not(:hover) .nav-item,
-          .sidebar:not(:hover) .logo-section {
-             justify-content: center;
-             padding-left: 0;
-             padding-right: 0;
-          }
-
-          .sidebar:not(:hover) .nav-item {
-             padding: 0.875rem 0;
-          }
-        }
-        
-        .nav-item {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          padding: 0.875rem 1rem;
-          border-radius: 0.625rem;
-          color: var(--text-secondary);
-          text-decoration: none;
-          transition: all 0.2s ease;
-          width: 100%;
-          position: relative;
-        }
-        
-        .nav-item:hover {
-          background: var(--divider-dark);
-          color: var(--text-primary-dark);
-        }
-        
-        .nav-item.active {
-          background: rgba(59, 130, 246, 0.15);
-          color: var(--primary-start);
-          box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
-          border-left: 3px solid var(--primary-start);
-        }
-        
-        .logout-btn {
-          width: 100%;
-          color: var(--text-secondary);
-        }
-        
-        .logout-btn:hover {
-          background: var(--divider-dark);
-          color: var(--text-primary-dark);
-        }
-      `}</style>
+      </aside>
     </>
   );
 }
