@@ -13,20 +13,23 @@ export const useRealtimeData = (path, options = {}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Destructure options to properly track dependencies
+  const { enabled = true, orderBy, limitToLast: limit, sortBy, sortDesc } = options;
+
   useEffect(() => {
     // Don't subscribe if auto-refresh is disabled
-    if (options.enabled === false) {
+    if (!enabled) {
       return;
     }
 
     let dbRef = ref(database, path);
 
     // Apply query options
-    if (options.orderBy) {
-      dbRef = query(dbRef, orderByChild(options.orderBy));
+    if (orderBy) {
+      dbRef = query(dbRef, orderByChild(orderBy));
     }
-    if (options.limitToLast) {
-      dbRef = query(dbRef, limitToLast(options.limitToLast));
+    if (limit) {
+      dbRef = query(dbRef, limitToLast(limit));
     }
 
     const unsubscribe = onValue(
@@ -41,17 +44,17 @@ export const useRealtimeData = (path, options = {}) => {
           }));
 
           // Sort if needed
-          if (options.sortBy) {
+          if (sortBy) {
             dataArray.sort((a, b) => {
-              const aVal = a[options.sortBy];
-              const bVal = b[options.sortBy];
-              return options.sortDesc
+              const aVal = a[sortBy];
+              const bVal = b[sortBy];
+              return sortDesc
                 ? bVal > aVal
                   ? 1
                   : -1
                 : aVal > bVal
-                ? 1
-                : -1;
+                  ? 1
+                  : -1;
             });
           }
 
@@ -70,7 +73,7 @@ export const useRealtimeData = (path, options = {}) => {
     );
 
     return () => unsubscribe();
-  }, [path, JSON.stringify(options)]);
+  }, [path, enabled, orderBy, limit, sortBy, sortDesc]);
 
   return { data, loading, error };
 };

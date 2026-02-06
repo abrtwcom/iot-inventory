@@ -48,69 +48,69 @@ export default function Home() {
   ];
 
   return (
-    <div className="space-y-8 animate-fadeIn text-slate-100">
+    <div className="flex flex-col space-y-16 animate-fadeIn text-slate-100 pb-20">
 
       {/* Hero Header Section - Dashboard Style */}
-      <section className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 to-slate-800 border border-white/10 shadow-2xl">
+      <section className="relative w-full rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 to-slate-800 border border-white/10 shadow-2xl">
         <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
           <Warehouse size={400} />
         </div>
 
-        <div className="relative z-10 p-8 md:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-12">
-          <div className="max-w-2xl space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium">
+        <div className="relative z-10 p-10 md:p-16 lg:p-20 flex flex-col md:flex-row items-center justify-between gap-16">
+          <div className="max-w-3xl space-y-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium tracking-wide">
               <Zap size={14} className="fill-current" />
-              <span>Powered by ESP32 BLE Technology</span>
+              <span>POWERED BY ESP32 BLE TECHNOLOGY</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
               Smart Inventory & <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
                 Logistics Automation
               </span>
             </h1>
 
-            <p className="text-lg text-slate-400 leading-relaxed max-w-lg">
+            <p className="text-xl text-slate-400 leading-relaxed max-w-xl tracking-wide">
               Revolutionize your warehouse operations with real-time package tracking,
               instant verification, and seamless BLE beacon integration.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <Link to="/sender" className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold transition-all shadow-lg shadow-blue-900/20 flex items-center gap-2 group">
-                Get Started <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            <div className="flex flex-wrap items-center gap-6 pt-4">
+              <Link to="/sender" className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-xl font-bold tracking-wide transition-all shadow-lg shadow-blue-900/20 flex items-center gap-3 group text-lg">
+                Get Started <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link to="/warehouse" className="px-8 py-3.5 rounded-xl font-semibold text-slate-300 hover:text-white hover:bg-white/5 border border-white/10 transition-all flex items-center gap-2">
-                <Activity size={20} /> Live Demo
+              <Link to="/warehouse" className="px-10 py-4 rounded-xl font-bold tracking-wide text-slate-300 hover:text-white hover:bg-white/5 border border-white/10 transition-all flex items-center gap-3 text-lg">
+                <Activity size={22} /> Live Demo
               </Link>
             </div>
           </div>
 
           {/* Abstract decorative graphic or dashboard preview */}
-          <div className="hidden lg:block relative w-96 h-80">
+          <div className="hidden xl:block relative w-[500px] h-[400px] flex-shrink-0">
             <div className="absolute inset-0 bg-blue-500/5 rounded-2xl rotate-3 border border-white/5 backdrop-blur-sm"></div>
             <div className="absolute inset-0 bg-indigo-500/5 rounded-2xl -rotate-3 border border-white/5 backdrop-blur-sm"></div>
-            <div className="absolute inset-0 bg-slate-800/80 rounded-2xl border border-white/10 shadow-2xl p-6 flex flex-col gap-4">
+            <div className="absolute inset-0 bg-slate-800/80 rounded-2xl border border-white/10 shadow-2xl p-8 flex flex-col gap-6">
               {/* Fake UI elements for preview */}
-              <div className="h-24 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-white/5 p-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
-                  <Package size={24} />
+              <div className="h-28 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-white/5 p-5 flex items-center gap-5">
+                <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
+                  <Package size={32} />
                 </div>
-                <div>
-                  <div className="h-3 w-24 bg-slate-700 rounded mb-2"></div>
-                  <div className="h-2 w-32 bg-slate-800 rounded"></div>
-                </div>
-              </div>
-              <div className="h-24 rounded-lg bg-slate-900/50 border border-white/5 p-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-                  <Truck size={24} />
-                </div>
-                <div>
-                  <div className="h-3 w-24 bg-slate-700 rounded mb-2"></div>
-                  <div className="h-2 w-16 bg-slate-800 rounded"></div>
+                <div className="space-y-3">
+                  <div className="h-4 w-32 bg-slate-700 rounded-lg"></div>
+                  <div className="h-3 w-48 bg-slate-800 rounded-lg"></div>
                 </div>
               </div>
-              <div className="mt-auto flex gap-2">
-                <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-28 rounded-xl bg-slate-900/50 border border-white/5 p-5 flex items-center gap-5">
+                <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <Truck size={32} />
+                </div>
+                <div className="space-y-3">
+                  <div className="h-4 w-32 bg-slate-700 rounded-lg"></div>
+                  <div className="h-3 w-24 bg-slate-800 rounded-lg"></div>
+                </div>
+              </div>
+              <div className="mt-auto flex gap-3">
+                <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden">
                   <div className="h-full w-2/3 bg-blue-500 rounded-full"></div>
                 </div>
               </div>
@@ -120,24 +120,24 @@ export default function Home() {
       </section>
 
       {/* Stats Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
             <div
               key={index}
-              className="group p-6 rounded-2xl bg-slate-800/40 border border-white/5 hover:border-white/10 hover:bg-slate-800/60 transition-all duration-300"
+              className="group p-8 rounded-2xl bg-slate-800/40 border border-white/5 hover:border-white/10 hover:bg-slate-800/60 transition-all duration-300"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 rounded-xl bg-slate-900/50 group-hover:scale-110 transition-transform duration-300">
-                  <Icon size={24} className={stat.color} />
+              <div className="flex items-start justify-between mb-6">
+                <div className="p-4 rounded-xl bg-slate-900/50 group-hover:scale-110 transition-transform duration-300 border border-white/5">
+                  <Icon size={32} className={stat.color} />
                 </div>
-                <span className={`text-xs font-medium px-2 py-1 rounded-full ${stat.change.includes('+') ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-700 text-slate-400'}`}>
+                <span className={`text-xs font-bold tracking-wider uppercase px-3 py-1.5 rounded-full ${stat.change.includes('+') ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-700 text-slate-400'}`}>
                   {stat.change}
                 </span>
               </div>
-              <div className="text-3xl font-bold text-white mb-1 tracking-tight">{stat.number}</div>
-              <div className="text-sm text-slate-400 font-medium">{stat.label}</div>
+              <div className="text-4xl font-extrabold text-white mb-2 tracking-tight">{stat.number}</div>
+              <div className="text-base text-slate-400 font-medium tracking-wide">{stat.label}</div>
             </div>
           );
         })}
@@ -145,43 +145,44 @@ export default function Home() {
 
       {/* Portals Section */}
       <section>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-white">Access Portals</h2>
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-3xl font-bold text-white tracking-tight">Access Portals</h2>
+          <div className="h-px w-full max-w-xs bg-gradient-to-r from-blue-500/20 to-transparent ml-6"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {portals.map((portal) => {
             const Icon = portal.icon;
             return (
               <Link
                 key={portal.path}
                 to={portal.path}
-                className="group relative overflow-hidden rounded-2xl bg-slate-800 border border-white/5 hover:border-blue-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-900/20"
+                className="group relative overflow-hidden rounded-3xl bg-slate-800 border border-white/5 hover:border-blue-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-900/20 h-full flex flex-col"
               >
-                <div className={`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${portal.color}`}></div>
+                <div className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${portal.color}`}></div>
 
-                <div className="p-6 md:p-8 relative z-10">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${portal.color} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="text-white" size={28} />
+                <div className="p-8 lg:p-10 relative z-10 flex-1 flex flex-col">
+                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${portal.color} flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className="text-white" size={32} />
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors tracking-tight">
                     {portal.title}
                   </h3>
-                  <p className="text-slate-400 text-sm mb-6 line-clamp-2">
+                  <p className="text-slate-400 text-base mb-8 line-clamp-3 leading-relaxed">
                     {portal.description}
                   </p>
 
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-4 mb-8 mt-auto">
                     {portal.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-slate-500 group-hover:text-slate-300 transition-colors">
-                        <CheckCircle size={14} className="text-blue-500/50 group-hover:text-blue-400" />
-                        {feature}
+                      <li key={i} className="flex items-center gap-3 text-sm text-slate-500 group-hover:text-slate-300 transition-colors">
+                        <CheckCircle size={16} className="text-blue-500/50 group-hover:text-blue-400 flex-shrink-0" />
+                        <span className="font-medium tracking-wide">{feature}</span>
                       </li>
                     ))}
                   </ul>
 
-                  <div className="inline-flex items-center gap-2 text-sm font-semibold text-blue-400 group-hover:translate-x-1 transition-transform">
+                  <div className="inline-flex items-center gap-2 text-sm font-bold text-blue-400 group-hover:translate-x-2 transition-transform uppercase tracking-widest mt-4">
                     Enter Portal <ArrowRight size={16} />
                   </div>
                 </div>

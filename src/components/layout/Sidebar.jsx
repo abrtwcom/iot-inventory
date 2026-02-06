@@ -36,9 +36,9 @@ export default function Sidebar({ isOpen = false, onClose }) {
         {/* Logo Section */}
         <div className="h-20 flex items-center justify-center border-b border-[var(--divider)] overflow-hidden">
           {/* We keep the logo centered or adapt based on hover */}
-          <div className="flex items-center gap-3 transition-all duration-300">
-            <div className="flex-shrink-0">
-              <AppLogo iconClass="w-10 h-10" textClass={isHovered ? "block ml-2 text-xl font-bold" : "hidden"} />
+          <div className="flex items-center gap-4 transition-all duration-300">
+            <div className="flex-shrink-0 scale-110">
+              <AppLogo iconClass="w-10 h-10" textClass={isHovered ? "block ml-3 text-2xl font-bold tracking-tight" : "hidden"} />
             </div>
           </div>
         </div>
@@ -55,8 +55,8 @@ export default function Sidebar({ isOpen = false, onClose }) {
                 to={item.path}
                 onClick={handleNavClick}
                 className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group relative ${active
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-900/40"
-                    : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-900/40"
+                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
                   }`}
               >
                 <div className="flex-shrink-0 flex items-center justify-center w-8">

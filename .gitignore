@@ -1,4 +1,4 @@
- q# Logs
+# Logs
 logs
 *.log
 npm-debug.log*
@@ -33,7 +33,7 @@ dist-ssr
 .firebasecache
 
 # Build outputs
-*.local
+# (*.local already covered above)
 
 # OS files
 Thumbs.db

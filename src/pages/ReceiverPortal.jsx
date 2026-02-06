@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { ref, update, get } from "firebase/database";
 import { database } from "../firebase/config";
@@ -35,8 +35,11 @@ export default function ReceiverPortal() {
     }
   }, [user, authLoading, navigate]);
 
-  const myProducts =
-    allProducts?.filter((p) => p.receiver_email === user?.email) || [];
+  // Memoize myProducts to prevent recreating on every render
+  const myProducts = useMemo(
+    () => allProducts?.filter((p) => p.receiver_email === user?.email) || [],
+    [allProducts, user?.email]
+  );
 
   // Auto-sync product.status with warehouse/current_status updates coming from ESP32
   useEffect(() => {
@@ -63,7 +66,7 @@ export default function ReceiverPortal() {
         console.error("Error syncing product status from current_status:", err);
       }
     });
-  }, [currentStatus, allProducts, user, myProducts, updateProduct]);
+  }, [currentStatus, myProducts, updateProduct]);
 
   const handleMarkReceived = async (product) => {
     await updateProduct(product.id, {
@@ -342,7 +345,7 @@ export default function ReceiverPortal() {
             <div className="verification-text">
               <h2 className="text-lg font-bold text-white mb-2">Bluetooth Verification</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }}>
-                Verify which packages are physically present using Bluetooth scanning. 
+                Verify which packages are physically present using Bluetooth scanning.
                 The Master ESP32 will scan all slave devices to detect your packages in real-time.
               </p>
               <div className="flex flex-wrap gap-2 mt-3">

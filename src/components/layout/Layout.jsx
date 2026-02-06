@@ -37,13 +37,13 @@ export default function Layout() {
 
       {/* Main Content Area */}
       <main
-        className="flex-1 min-h-screen transition-all duration-300 ease-in-out"
+        className="flex-1 min-h-screen transition-all duration-300 ease-in-out bg-[var(--color-bg)]"
         style={{
           marginLeft: "var(--sidebar-collapsed)", // Default for desktop
           width: `calc(100% - var(--sidebar-collapsed))`
         }}
       >
-        <div className="p-4 md:p-8 pt-20 md:pt-8 max-w-[1600px] mx-auto">
+        <div className="w-full max-w-[1500px] mx-auto p-6 md:p-10 pt-20 md:pt-10">
           <Outlet />
         </div>
       </main>
