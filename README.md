@@ -1,4 +1,4 @@
-# 🏭 IoT Warehouse Automation System
+🏭 IoT Warehouse Automation System
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-19.1-61dafb?logo=react)](https://reactjs.org/)
@@ -9,7 +9,7 @@ A real-time warehouse package tracking system powered by ESP32 BLE beacons, Reac
 
 📖 **[Read the full blog post](https://medium.com/@amitbartwal008/warehouse-automation-how-iot-real-time-tracking-are-transforming-logistics-669beeb8fb8a)** to learn more about the technology behind this project.
 
-## ✨ Features
+ ✨ Features
 
 - **📍 Real-time Tracking**: Monitor package locations using ESP32 BLE scanners and beacons
 - **🔄 Multi-Portal Interface**: Separate portals for senders, receivers, and warehouse monitoring
@@ -19,24 +19,24 @@ A real-time warehouse package tracking system powered by ESP32 BLE beacons, Reac
 - **⚡ Live Updates**: Watch package status change in real-time as devices are detected
 - **📊 Analytics Dashboard**: Track shipments, delivery status, and warehouse activity
 
-## 🖼️ Screenshots
+🖼️ Screenshots
 
-### Home Page
+ Home Page
 Landing page with navigation to all portals and system overview.
 
 <img width="1910" height="782" alt="Screenshot From 2026-01-21 14-26-57" src="https://github.com/user-attachments/assets/987286dd-f998-46e9-b412-5b1518e9a629" />
 
-### Sender Portal
+Sender Portal
 Create new shipments, assign ESP32 devices to packages, and view all sent shipments.
 
 <img width="1904" height="924" alt="Screenshot From 2026-01-19 19-56-42" src="https://github.com/user-attachments/assets/56a1f6e0-3cc1-493b-b498-130d4244f99a" />
 
-### Receiver Portal
+Receiver Portal
 View incoming products, verify package presence with Bluetooth, and mark items as received.
 
 <img width="1904" height="924" alt="Screenshot From 2026-01-19 19-57-05" src="https://github.com/user-attachments/assets/7ac858f9-3d53-4c95-a3a7-feac0d6989ec" />
 
-## 🛠️ Tech Stack
+🛠️ Tech Stack
 
 - **Frontend**: React 19 + Vite
 - **Styling**: Tailwind CSS 3.4
@@ -46,16 +46,16 @@ View incoming products, verify package presence with Bluetooth, and mark items a
 - **Hardware**: ESP32 (Master and Slave devices)
 - **Communication Protocol**: Bluetooth Low Energy (BLE)
 
-## 🚀 Getting Started
+ 🚀 Getting Started
 
-### Prerequisites
+Prerequisites
 
 - **Node.js** v18 or higher
 - **npm** or **yarn**
 - **Firebase project** with Realtime Database and Authentication enabled
 - (Optional) ESP32 devices for hardware integration
 
-### Installation
+Installation
 
 1. **Clone the repository**
    ```bash
@@ -101,7 +101,7 @@ View incoming products, verify package presence with Bluetooth, and mark items a
 
    The production-ready files will be in the `dist/` directory.
 
-## 📁 Project Structure
+📁 Project Structure
 
 ```
 warehose-automation/
@@ -146,14 +146,14 @@ warehose-automation/
 └── README.md                      # This file
 ```
 
-## 🔌 ESP32 Integration
+🔌 ESP32 Integration
 
 The system uses ESP32 devices for Bluetooth Low Energy (BLE) communication:
 
 - **ESP32 Master**: Acts as a BLE scanner that detects all slave devices in range
 - **ESP32 Slaves**: BLE beacons attached to physical packages/products
 
-### How it works:
+How it works:
 
 1. Master ESP32 continuously scans for BLE devices
 2. When slaves are detected, Master updates Firebase with device presence
@@ -162,7 +162,7 @@ The system uses ESP32 devices for Bluetooth Low Energy (BLE) communication:
 
 See [`ESP32_MASTER_TRIGGERED.ino`](ESP32_MASTER_TRIGGERED.ino) and [`ESP32_TRIGGER_UPDATE.md`](ESP32_TRIGGER_UPDATE.md) for detailed implementation instructions.
 
-## 📱 Application Features
+📱 Application Features
 
 ### 🏠 Home Page
 - Landing page with overview of the system
