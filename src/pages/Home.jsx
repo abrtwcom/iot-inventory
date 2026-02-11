@@ -217,7 +217,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="py-8 border-t border-white/5 mt-auto text-center text-slate-500 text-sm">
-        <p>© {new Date().getFullYear()} WareHub. Powered by Antigravity.</p>
+        <p>© {new Date().getFullYear()} WareHub. Made with logic by ❤️.</p>
       </footer>
     </div>
   );
