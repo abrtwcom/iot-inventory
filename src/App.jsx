@@ -7,7 +7,7 @@ import SenderPortal from './pages/SenderPortal';
 import ReceiverPortal from './pages/ReceiverPortal';
 import { useAuth } from './hooks/useAuth';
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children, allowedRoles = [] }) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -23,6 +23,11 @@ function ProtectedRoute({ children }) {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role) && user.role !== 'admin') {
+    // Redirect to home if role not authorized
+    return <Navigate to="/" replace />;
   }
 
   return children;
@@ -42,7 +47,7 @@ function App() {
           <Route
             path="sender"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['sender', 'admin']}>
                 <SenderPortal />
               </ProtectedRoute>
             }
@@ -50,7 +55,7 @@ function App() {
           <Route
             path="receiver"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['receiver', 'admin']}>
                 <ReceiverPortal />
               </ProtectedRoute>
             }

@@ -16,6 +16,27 @@ export default function Sidebar({ isOpen = false, onClose }) {
     { path: "/receiver", label: "Receiver Portal", icon: Truck },
   ];
 
+  const filteredNavItems = navItems.filter((item) => {
+    // Unauthenticated users see everything (links redirect to login)
+    if (!user) return true;
+
+    // Admin sees everything
+    if (user.role === 'admin') return true;
+
+    // Sender role
+    if (user.role === 'sender') {
+      return item.path !== '/receiver';
+    }
+
+    // Receiver role
+    if (user.role === 'receiver') {
+      return item.path !== '/sender';
+    }
+
+    // Default fallback (shouldn't happen with current roles, but safe)
+    return true;
+  });
+
   const isActive = (path) => location.pathname === path;
 
   const handleNavClick = () => {
@@ -45,7 +66,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
 
         {/* Navigation */}
         <nav className="flex-1 py-6 px-3 space-y-2 overflow-y-auto overflow-x-hidden">
-          {navItems.map((item) => {
+          {filteredNavItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
 
