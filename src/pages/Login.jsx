@@ -69,7 +69,7 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      await loginWithGoogle();
+      await loginWithGoogle(role);
       navigate('/');
     } catch (err) {
       setError(getErrorMessage(err));
@@ -155,21 +155,35 @@ export default function Login() {
             />
           </div>
 
-          {mode === 'signup' && (
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                Role
+          <div>
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              I am a
+            </label>
+            <div className="grid grid-cols-2 gap-4">
+              <label className={`flex items-center justify-center px-4 py-3 border rounded-lg cursor-pointer transition-all ${role === 'sender' ? 'bg-blue-50 border-blue-500 text-blue-700 font-medium ring-1 ring-blue-500' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                <input
+                  type="radio"
+                  name="role"
+                  value="sender"
+                  checked={role === 'sender'}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="hidden"
+                />
+                Sender
               </label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-              >
-                <option value="sender">Sender</option>
-                <option value="receiver">Receiver</option>
-              </select>
+              <label className={`flex items-center justify-center px-4 py-3 border rounded-lg cursor-pointer transition-all ${role === 'receiver' ? 'bg-blue-50 border-blue-500 text-blue-700 font-medium ring-1 ring-blue-500' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                <input
+                  type="radio"
+                  name="role"
+                  value="receiver"
+                  checked={role === 'receiver'}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="hidden"
+                />
+                Receiver
+              </label>
             </div>
-          )}
+          </div>
 
           <button
             type="submit"

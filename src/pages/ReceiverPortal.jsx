@@ -191,7 +191,11 @@ export default function ReceiverPortal() {
       );
     } catch (error) {
       console.error("Verification error:", error);
-      alert("Verification failed. Please try again.\nError: " + error.message);
+      if (error.code === 'PERMISSION_DENIED') {
+        alert("Verification failed: Permission Denied.\n\nPlease ensure your Firebase Realtime Database rules allow writing to 'warehouse/scanner' and 'warehouse/detections'. Check the provided rules update guide.");
+      } else {
+        alert("Verification failed. Please try again.\nError: " + error.message);
+      }
     } finally {
       setIsScanning(false);
     }

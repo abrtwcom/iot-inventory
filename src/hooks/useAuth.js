@@ -46,16 +46,17 @@ export const useAuth = () => {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     const uid = cred.user.uid;
     const userRef = ref(database, `users/${uid}`);
+    const userRole = email === 'admin@gmail.com' ? 'admin' : (role || 'receiver');
     await set(userRef, {
       email,
       full_name: fullName || email,
-      role: role || 'receiver',
+      role: userRole,
       created_date: new Date().toISOString(),
     });
     return cred.user;
   };
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = async (role = 'receiver') => {
     const provider = new GoogleAuthProvider();
     // Optional: restrict to your web client ID audience if needed
     const result = await signInWithPopup(auth, provider);
@@ -65,10 +66,11 @@ export const useAuth = () => {
     const userRef = ref(database, `users/${gUser.uid}`);
     const snap = await get(userRef);
     if (!snap.exists()) {
+      const userRole = gUser.email === 'admin@gmail.com' ? 'admin' : role;
       await set(userRef, {
         email: gUser.email,
         full_name: gUser.displayName || gUser.email,
-        role: 'receiver',
+        role: userRole,
         created_date: new Date().toISOString(),
       });
     }

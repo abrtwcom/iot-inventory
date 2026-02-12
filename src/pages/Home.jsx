@@ -12,8 +12,10 @@ import {
   BarChart3,
   Activity
 } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Home() {
+  const { user } = useAuth();
   const portals = [
     {
       path: "/sender",
@@ -151,44 +153,52 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {portals.map((portal) => {
-            const Icon = portal.icon;
-            return (
-              <Link
-                key={portal.path}
-                to={portal.path}
-                className="group relative overflow-hidden rounded-3xl bg-slate-800 border border-white/5 hover:border-blue-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-900/20 h-full flex flex-col"
-              >
-                <div className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${portal.color}`}></div>
+          {portals
+            .filter((portal) => {
+              if (!user) return true;
+              if (user.role === 'admin') return true;
+              if (user.role === 'sender') return portal.path !== '/receiver';
+              if (user.role === 'receiver') return portal.path !== '/sender';
+              return true;
+            })
+            .map((portal) => {
+              const Icon = portal.icon;
+              return (
+                <Link
+                  key={portal.path}
+                  to={portal.path}
+                  className="group relative overflow-hidden rounded-3xl bg-slate-800 border border-white/5 hover:border-blue-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-900/20 h-full flex flex-col"
+                >
+                  <div className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${portal.color}`}></div>
 
-                <div className="p-8 lg:p-10 relative z-10 flex-1 flex flex-col">
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${portal.color} flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="text-white" size={32} />
+                  <div className="p-8 lg:p-10 relative z-10 flex-1 flex flex-col">
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${portal.color} flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="text-white" size={32} />
+                    </div>
+
+                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors tracking-tight">
+                      {portal.title}
+                    </h3>
+                    <p className="text-slate-400 text-base mb-8 line-clamp-3 leading-relaxed">
+                      {portal.description}
+                    </p>
+
+                    <ul className="space-y-4 mb-8 mt-auto">
+                      {portal.features.map((feature, i) => (
+                        <li key={i} className="flex items-center gap-3 text-sm text-slate-500 group-hover:text-slate-300 transition-colors">
+                          <CheckCircle size={16} className="text-blue-500/50 group-hover:text-blue-400 flex-shrink-0" />
+                          <span className="font-medium tracking-wide">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="inline-flex items-center gap-2 text-sm font-bold text-blue-400 group-hover:translate-x-2 transition-transform uppercase tracking-widest mt-4">
+                      Enter Portal <ArrowRight size={16} />
+                    </div>
                   </div>
-
-                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors tracking-tight">
-                    {portal.title}
-                  </h3>
-                  <p className="text-slate-400 text-base mb-8 line-clamp-3 leading-relaxed">
-                    {portal.description}
-                  </p>
-
-                  <ul className="space-y-4 mb-8 mt-auto">
-                    {portal.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3 text-sm text-slate-500 group-hover:text-slate-300 transition-colors">
-                        <CheckCircle size={16} className="text-blue-500/50 group-hover:text-blue-400 flex-shrink-0" />
-                        <span className="font-medium tracking-wide">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="inline-flex items-center gap-2 text-sm font-bold text-blue-400 group-hover:translate-x-2 transition-transform uppercase tracking-widest mt-4">
-                    Enter Portal <ArrowRight size={16} />
-                  </div>
-                </div>
-              </Link>
-            )
-          })}
+                </Link>
+              )
+            })}
         </div>
       </section>
 

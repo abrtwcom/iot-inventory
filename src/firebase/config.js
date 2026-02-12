@@ -6,12 +6,12 @@ import { getAuth } from 'firebase/auth';
 // Firebase configuration - use environment variables
 // Create a .env file with your Firebase credentials
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  apiKey: "AIzaSyCfn8sXkHx4wl-dfOVTXeNznyu--G4ydDY",
+  authDomain: "iot-inventory-87709788-95492.firebaseapp.com",
+  projectId: "iot-inventory-87709788-95492",
+  storageBucket: "iot-inventory-87709788-95492.firebasestorage.app",
+  messagingSenderId: "1076687162237",
+  appId: "1:1076687162237:web:aae0d350af69a8d84fda14"
 };
 
 // Validate config
