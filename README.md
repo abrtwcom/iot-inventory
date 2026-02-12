@@ -1,4 +1,5 @@
 🏭 IoT Warehouse Automation System
+https://iot-inventory-87709788-95492.web.app/
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-19.1-61dafb?logo=react)](https://reactjs.org/)
