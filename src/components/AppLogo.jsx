@@ -2,7 +2,7 @@ import logo from '../assets/logo.png';
 
 export default function AppLogo({
     className = "",
-    iconClass = "h-8 w-auto",
+    iconClass = "h-9 w-auto",
     textClass = "text-xl font-bold text-white",
     showText = true
 }) {

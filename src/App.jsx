@@ -25,9 +25,12 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role) && user.role !== 'admin') {
-    // Redirect to home if role not authorized
-    return <Navigate to="/" replace />;
+  if (allowedRoles.length > 0) {
+    const hasRequiredRole = user.role === 'admin' || allowedRoles.includes(user.role);
+    if (!hasRequiredRole) {
+      // Redirect to home if role not authorized
+      return <Navigate to="/" replace />;
+    }
   }
 
   return children;

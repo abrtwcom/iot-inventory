@@ -14,18 +14,22 @@ export const useAuth = () => {
         try {
           const userRef = ref(database, `users/${firebaseUser.uid}`);
           const snapshot = await get(userRef);
-          const userData = snapshot.val();
+          const userData = snapshot.val() || {};
+          const forcedRole = firebaseUser.email === 'admin@gmail.com' ? 'admin' : userData.role;
 
           setUser({
             uid: firebaseUser.uid,
             email: firebaseUser.email,
-            ...userData
+            ...userData,
+            role: forcedRole
           });
         } catch (error) {
           console.error('Error fetching user data:', error);
+          const forcedRole = firebaseUser.email === 'admin@gmail.com' ? 'admin' : null;
           setUser({
             uid: firebaseUser.uid,
             email: firebaseUser.email,
+            role: forcedRole
           });
         }
       } else {
