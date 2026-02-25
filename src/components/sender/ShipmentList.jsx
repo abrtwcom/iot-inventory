@@ -1,6 +1,15 @@
-import { Package, Calendar, Mail, User, ArrowRight, CheckCircle, Clock, XCircle } from 'lucide-react';
-import { formatDateTime } from '../../utils/formatters';
-import StatusBadge from '../common/StatusBadge';
+import {
+  Package,
+  Calendar,
+  Mail,
+  User,
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  XCircle,
+} from "lucide-react";
+import { formatDateTime } from "../../utils/formatters";
+import StatusBadge from "../common/StatusBadge";
 
 export default function ShipmentList({ shipments, loading }) {
   if (loading) {
@@ -11,7 +20,7 @@ export default function ShipmentList({ shipments, loading }) {
           My Shipments
         </h2>
         <div className="list-space">
-          {[1, 2, 3].map(i => (
+          {[1, 2, 3].map((i) => (
             <div key={i} className="skeleton-card"></div>
           ))}
         </div>
@@ -54,19 +63,19 @@ export default function ShipmentList({ shipments, loading }) {
                 <StatusBadge status={shipment.status} />
               </div>
               <div className="card-status">
-                {shipment.status === 'received' && (
+                {shipment.status === "received" && (
                   <span className="status-badge delivered">
                     <CheckCircle size={14} />
                     Delivered
                   </span>
                 )}
-                {shipment.status === 'sent' && (
+                {shipment.status === "sent" && (
                   <span className="status-badge transit">
                     <Clock size={14} />
                     In Transit
                   </span>
                 )}
-                {shipment.status === 'missing' && (
+                {shipment.status === "missing" && (
                   <span className="status-badge missing">
                     <XCircle size={14} />
                     Missing

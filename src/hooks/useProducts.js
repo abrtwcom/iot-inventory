@@ -1,9 +1,18 @@
-import { ref, push, update, remove, get, query, orderByChild, equalTo } from 'firebase/database';
-import { database } from '../firebase/config';
+import {
+  ref,
+  push,
+  update,
+  remove,
+  get,
+  query,
+  orderByChild,
+  equalTo,
+} from "firebase/database";
+import { database } from "../firebase/config";
 
 export const useProducts = () => {
   const createProduct = async (productData) => {
-    const productsRef = ref(database, 'products');
+    const productsRef = ref(database, "products");
     const newProductRef = push(productsRef);
 
     const data = {
@@ -20,7 +29,7 @@ export const useProducts = () => {
     const productRef = ref(database, `products/${productId}`);
     await update(productRef, {
       ...updates,
-      updated_date: new Date().toISOString()
+      updated_date: new Date().toISOString(),
     });
   };
 
@@ -30,23 +39,37 @@ export const useProducts = () => {
   };
 
   const getProductsByReceiver = async (receiverEmail) => {
-    const productsRef = ref(database, 'products');
-    const q = query(productsRef, orderByChild('receiver_email'), equalTo(receiverEmail));
+    const productsRef = ref(database, "products");
+    const q = query(
+      productsRef,
+      orderByChild("receiver_email"),
+      equalTo(receiverEmail)
+    );
     const snapshot = await get(q);
 
     if (snapshot.exists()) {
-      return Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
+      return Object.entries(snapshot.val()).map(([id, data]) => ({
+        id,
+        ...data,
+      }));
     }
     return [];
   };
 
   const getProductsBySender = async (senderEmail) => {
-    const productsRef = ref(database, 'products');
-    const q = query(productsRef, orderByChild('sender_email'), equalTo(senderEmail));
+    const productsRef = ref(database, "products");
+    const q = query(
+      productsRef,
+      orderByChild("sender_email"),
+      equalTo(senderEmail)
+    );
     const snapshot = await get(q);
 
     if (snapshot.exists()) {
-      return Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
+      return Object.entries(snapshot.val()).map(([id, data]) => ({
+        id,
+        ...data,
+      }));
     }
     return [];
   };
@@ -56,7 +79,6 @@ export const useProducts = () => {
     updateProduct,
     deleteProduct,
     getProductsByReceiver,
-    getProductsBySender
+    getProductsBySender,
   };
 };
-

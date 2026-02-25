@@ -9,13 +9,13 @@ import {
   ArrowRight,
   CheckCircle,
   Smartphone,
-  BarChart3,
-  Activity
+  Activity,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Home() {
   const { user } = useAuth();
+
   const portals = [
     {
       path: "/sender",
@@ -31,7 +31,11 @@ export default function Home() {
       description: "View and verify incoming packages",
       icon: Truck,
       color: "from-emerald-500 to-emerald-600",
-      features: ["Bluetooth verification", "Package validation", "Secure receipt"],
+      features: [
+        "Bluetooth verification",
+        "Package validation",
+        "Secure receipt",
+      ],
     },
     {
       path: "/warehouse",
@@ -44,15 +48,31 @@ export default function Home() {
   ];
 
   const stats = [
-    { number: "247", label: "Active Shipments", icon: Package, change: "+12%", color: "text-blue-400" },
-    { number: "89", label: "BLE Devices", icon: Bluetooth, change: "Stable", color: "text-emerald-400" },
-    { number: "1,203", label: "Verified Packages", icon: Shield, change: "+5%", color: "text-purple-400" },
+    {
+      number: "247",
+      label: "Active Shipments",
+      icon: Package,
+      change: "+12%",
+      color: "text-blue-400",
+    },
+    {
+      number: "89",
+      label: "BLE Devices",
+      icon: Bluetooth,
+      change: "Stable",
+      color: "text-emerald-400",
+    },
+    {
+      number: "1,203",
+      label: "Verified Packages",
+      icon: Shield,
+      change: "+5%",
+      color: "text-purple-400",
+    },
   ];
 
   return (
     <div className="flex flex-col space-y-16 animate-fadeIn text-slate-100 pb-20">
-
-      {/* Hero Header Section - Dashboard Style */}
       <section className="relative w-full rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 to-slate-800 border border-white/10 shadow-2xl">
         <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
           <Warehouse size={400} />
@@ -73,26 +93,35 @@ export default function Home() {
             </h1>
 
             <p className="text-xl text-slate-400 leading-relaxed max-w-xl tracking-wide">
-              Revolutionize your warehouse operations with real-time package tracking,
-              instant verification, and seamless BLE beacon integration.
+              Revolutionize your warehouse operations with real-time package
+              tracking, instant verification, and seamless BLE beacon
+              integration.
             </p>
 
             <div className="flex flex-wrap items-center gap-6 pt-4">
-              <Link to="/sender" className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-xl font-bold tracking-wide transition-all shadow-lg shadow-blue-900/20 flex items-center gap-3 group text-lg">
-                Get Started <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+              <Link
+                to="/sender"
+                className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-xl font-bold tracking-wide transition-all shadow-lg shadow-blue-900/20 flex items-center gap-3 group text-lg"
+              >
+                Get Started{" "}
+                <ArrowRight
+                  size={22}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
               </Link>
-              <Link to="/warehouse" className="px-10 py-4 rounded-xl font-bold tracking-wide text-slate-300 hover:text-white hover:bg-white/5 border border-white/10 transition-all flex items-center gap-3 text-lg">
+              <Link
+                to="/warehouse"
+                className="px-10 py-4 rounded-xl font-bold tracking-wide text-slate-300 hover:text-white hover:bg-white/5 border border-white/10 transition-all flex items-center gap-3 text-lg"
+              >
                 <Activity size={22} /> Live Demo
               </Link>
             </div>
           </div>
 
-          {/* Abstract decorative graphic or dashboard preview */}
           <div className="hidden xl:block relative w-[500px] h-[400px] flex-shrink-0">
             <div className="absolute inset-0 bg-blue-500/5 rounded-2xl rotate-3 border border-white/5 backdrop-blur-sm"></div>
             <div className="absolute inset-0 bg-indigo-500/5 rounded-2xl -rotate-3 border border-white/5 backdrop-blur-sm"></div>
             <div className="absolute inset-0 bg-slate-800/80 rounded-2xl border border-white/10 shadow-2xl p-8 flex flex-col gap-6">
-              {/* Fake UI elements for preview */}
               <div className="h-28 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-white/5 p-5 flex items-center gap-5">
                 <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
                   <Package size={32} />
@@ -121,7 +150,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Grid */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
@@ -134,21 +162,31 @@ export default function Home() {
                 <div className="p-4 rounded-xl bg-slate-900/50 group-hover:scale-110 transition-transform duration-300 border border-white/5">
                   <Icon size={32} className={stat.color} />
                 </div>
-                <span className={`text-xs font-bold tracking-wider uppercase px-3 py-1.5 rounded-full ${stat.change.includes('+') ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-700 text-slate-400'}`}>
+                <span
+                  className={`text-xs font-bold tracking-wider uppercase px-3 py-1.5 rounded-full ${stat.change.includes("+")
+                      ? "bg-emerald-500/10 text-emerald-400"
+                      : "bg-slate-700 text-slate-400"
+                    }`}
+                >
                   {stat.change}
                 </span>
               </div>
-              <div className="text-4xl font-extrabold text-white mb-2 tracking-tight">{stat.number}</div>
-              <div className="text-base text-slate-400 font-medium tracking-wide">{stat.label}</div>
+              <div className="text-4xl font-extrabold text-white mb-2 tracking-tight">
+                {stat.number}
+              </div>
+              <div className="text-base text-slate-400 font-medium tracking-wide">
+                {stat.label}
+              </div>
             </div>
           );
         })}
       </section>
 
-      {/* Portals Section */}
       <section>
         <div className="flex items-center justify-between mb-10">
-          <h2 className="text-3xl font-bold text-white tracking-tight">Access Portals</h2>
+          <h2 className="text-3xl font-bold text-white tracking-tight">
+            Access Portals
+          </h2>
           <div className="h-px w-full max-w-xs bg-gradient-to-r from-blue-500/20 to-transparent ml-6"></div>
         </div>
 
@@ -156,9 +194,9 @@ export default function Home() {
           {portals
             .filter((portal) => {
               if (!user) return true;
-              if (user.role === 'admin') return true;
-              if (user.role === 'sender') return portal.path !== '/receiver';
-              if (user.role === 'receiver') return portal.path !== '/sender';
+              if (user.role === "admin") return true;
+              if (user.role === "sender") return portal.path !== "/receiver";
+              if (user.role === "receiver") return portal.path !== "/sender";
               return true;
             })
             .map((portal) => {
@@ -169,10 +207,14 @@ export default function Home() {
                   to={portal.path}
                   className="group relative overflow-hidden rounded-3xl bg-slate-800 border border-white/5 hover:border-blue-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-900/20 h-full flex flex-col"
                 >
-                  <div className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${portal.color}`}></div>
+                  <div
+                    className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${portal.color}`}
+                  ></div>
 
                   <div className="p-8 lg:p-10 relative z-10 flex-1 flex flex-col">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${portal.color} flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <div
+                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${portal.color} flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                    >
                       <Icon className="text-white" size={32} />
                     </div>
 
@@ -185,9 +227,17 @@ export default function Home() {
 
                     <ul className="space-y-4 mb-8 mt-auto">
                       {portal.features.map((feature, i) => (
-                        <li key={i} className="flex items-center gap-3 text-sm text-slate-500 group-hover:text-slate-300 transition-colors">
-                          <CheckCircle size={16} className="text-blue-500/50 group-hover:text-blue-400 flex-shrink-0" />
-                          <span className="font-medium tracking-wide">{feature}</span>
+                        <li
+                          key={i}
+                          className="flex items-center gap-3 text-sm text-slate-500 group-hover:text-slate-300 transition-colors"
+                        >
+                          <CheckCircle
+                            size={16}
+                            className="text-blue-500/50 group-hover:text-blue-400 flex-shrink-0"
+                          />
+                          <span className="font-medium tracking-wide">
+                            {feature}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -197,27 +247,47 @@ export default function Home() {
                     </div>
                   </div>
                 </Link>
-              )
+              );
             })}
         </div>
       </section>
 
-      {/* Why Choose Section - Kept minimal for footer context */}
       <section className="py-12 border-t border-white/5">
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-bold text-white mb-2">Why Choose WareHub?</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">
+            Why Choose WareHub?
+          </h2>
           <p className="text-slate-400 max-w-2xl mx-auto">
             Built for modern logistics with real-time tracking and verification.
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { title: "Real-Time Tracking", icon: Zap, color: "text-yellow-400" },
-            { title: "Secure Verification", icon: Shield, color: "text-purple-400" },
-            { title: "ESP32 Powered", icon: Bluetooth, color: "text-blue-400" },
-            { title: "Mobile Friendly", icon: Smartphone, color: "text-pink-400" }
+            {
+              title: "Real-Time Tracking",
+              icon: Zap,
+              color: "text-yellow-400",
+            },
+            {
+              title: "Secure Verification",
+              icon: Shield,
+              color: "text-purple-400",
+            },
+            {
+              title: "ESP32 Powered",
+              icon: Bluetooth,
+              color: "text-blue-400",
+            },
+            {
+              title: "Mobile Friendly",
+              icon: Smartphone,
+              color: "text-pink-400",
+            },
           ].map((feat, i) => (
-            <div key={i} className="p-4 rounded-xl bg-slate-900/50 border border-white/5 flex items-center gap-3">
+            <div
+              key={i}
+              className="p-4 rounded-xl bg-slate-900/50 border border-white/5 flex items-center gap-3"
+            >
               <feat.icon className={feat.color} size={20} />
               <span className="font-medium text-slate-200">{feat.title}</span>
             </div>
@@ -225,9 +295,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-8 border-t border-white/5 mt-auto text-center text-slate-500 text-sm">
-        <p>© {new Date().getFullYear()} WareHub. Made with logic by ❤️.</p>
+        <p>
+          © {new Date().getFullYear()} WareHub. Made with logic by ❤️.
+        </p>
       </footer>
     </div>
   );

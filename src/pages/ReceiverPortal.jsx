@@ -9,13 +9,11 @@ import ProductList from "../components/receiver/ProductList";
 import {
   Radio,
   Package,
-  ArrowRight,
   CheckCircle,
   XCircle,
   Bluetooth,
   Shield,
   Clock,
-  Smartphone,
   BadgeCheck,
 } from "lucide-react";
 
@@ -25,7 +23,6 @@ export default function ReceiverPortal() {
   const { updateProduct } = useProducts();
   const [isScanning, setIsScanning] = useState(false);
 
-  // Real-time subscriptions
   const { data: allProducts } = useRealtimeData("products");
   const { data: currentStatus } = useRealtimeData("warehouse/current_status");
 
@@ -35,13 +32,11 @@ export default function ReceiverPortal() {
     }
   }, [user, authLoading, navigate]);
 
-  // Memoize myProducts to prevent recreating on every render
   const myProducts = useMemo(
     () => allProducts?.filter((p) => p.receiver_email === user?.email) || [],
     [allProducts, user?.email]
   );
 
-  // Auto-sync product.status with warehouse/current_status updates coming from ESP32
   useEffect(() => {
     if (!currentStatus || currentStatus.length === 0 || !myProducts) return;
 
@@ -79,7 +74,6 @@ export default function ReceiverPortal() {
     setIsScanning(true);
 
     try {
-      // 1. Trigger ESP32 Master to scan all slaves
       const triggerRef = ref(database, "warehouse/scanner/trigger_scan");
       await update(triggerRef, {
         requested: true,
@@ -93,7 +87,6 @@ export default function ReceiverPortal() {
         last_seen: new Date().toISOString(),
       });
 
-      // 2. Wait for ESP32 to complete scan (~15-20 seconds)
       let scanComplete = false;
       let attempts = 0;
       const maxAttempts = 15;
@@ -122,20 +115,17 @@ export default function ReceiverPortal() {
         }
       }
 
-      // 3. Get current status from warehouse/current_status
       const currentStatusRef = ref(database, "warehouse/current_status");
       const currentStatusSnapshot = await get(currentStatusRef);
-      const currentStatus = currentStatusSnapshot.val() || {};
+      const currentStatusData = currentStatusSnapshot.val() || {};
 
-      // Extract detected device names from current_status
       const detectedDevices = new Set();
-      Object.entries(currentStatus).forEach(([deviceName, status]) => {
+      Object.entries(currentStatusData).forEach(([deviceName, status]) => {
         if (status.present === true) {
           detectedDevices.add(deviceName);
         }
       });
 
-      // Create a map of device_name -> product for this receiver
       const receiverDeviceMap = new Map();
       myProducts.forEach((product) => {
         if (product.device_name) {
@@ -143,7 +133,6 @@ export default function ReceiverPortal() {
         }
       });
 
-      // 4. Update product statuses based on detected slaves
       for (const product of myProducts) {
         if (product.status === "received") continue;
 
@@ -152,17 +141,12 @@ export default function ReceiverPortal() {
 
         let newStatus;
         if (isDetected) {
-          if (receiverDeviceMap.has(deviceName)) {
-            newStatus = "present";
-          } else {
-            newStatus = "irrelevant";
-          }
+          newStatus = receiverDeviceMap.has(deviceName)
+            ? "present"
+            : "irrelevant";
         } else {
-          if (product.receiver_email === user.email) {
-            newStatus = "missing";
-          } else {
-            newStatus = "irrelevant";
-          }
+          newStatus =
+            product.receiver_email === user.email ? "missing" : "irrelevant";
         }
 
         if (product.status !== newStatus) {
@@ -173,11 +157,9 @@ export default function ReceiverPortal() {
         }
       }
 
-      // 5. Reset trigger flag
       await update(triggerRef, { requested: false });
       await update(scannerStatusRef, { status: "online" });
 
-      // Show results
       const presentCount = myProducts.filter(
         (p) => p.status === "present"
       ).length;
@@ -191,10 +173,14 @@ export default function ReceiverPortal() {
       );
     } catch (error) {
       console.error("Verification error:", error);
-      if (error.code === 'PERMISSION_DENIED') {
-        alert("Verification failed: Permission Denied.\n\nPlease ensure your Firebase Realtime Database rules allow writing to 'warehouse/scanner' and 'warehouse/detections'. Check the provided rules update guide.");
+      if (error.code === "PERMISSION_DENIED") {
+        alert(
+          "Verification failed: Permission Denied.\n\nPlease ensure your Firebase Realtime Database rules allow writing to 'warehouse/scanner' and 'warehouse/detections'."
+        );
       } else {
-        alert("Verification failed. Please try again.\nError: " + error.message);
+        alert(
+          "Verification failed. Please try again.\nError: " + error.message
+        );
       }
     } finally {
       setIsScanning(false);
@@ -203,7 +189,9 @@ export default function ReceiverPortal() {
 
   const presentCount = myProducts.filter((p) => p.status === "present").length;
   const missingCount = myProducts.filter((p) => p.status === "missing").length;
-  const receivedCount = myProducts.filter((p) => p.status === "received").length;
+  const receivedCount = myProducts.filter(
+    (p) => p.status === "received"
+  ).length;
 
   if (authLoading) {
     return (
@@ -220,7 +208,6 @@ export default function ReceiverPortal() {
 
   return (
     <div className="page-container portal-container">
-      {/* Header */}
       <div className="header-section">
         <div
           className="icon-wrapper mx-auto mb-4"
@@ -234,10 +221,12 @@ export default function ReceiverPortal() {
           <Package size={28} />
         </div>
         <h1 className="portal-title">Receiver Portal</h1>
-        <p className="portal-description">Verify incoming packages with Bluetooth scanning and track your deliveries in real-time</p>
+        <p className="portal-description">
+          Verify incoming packages with Bluetooth scanning and track your
+          deliveries in real-time
+        </p>
       </div>
 
-      {/* Stats */}
       <div className="receiver-stats-grid">
         <div className="stats-card">
           <div className="number">{myProducts.length}</div>
@@ -275,7 +264,6 @@ export default function ReceiverPortal() {
         </div>
       </div>
 
-      {/* How It Works */}
       <div className="card how-it-works-card">
         <h2 className="section-title" style={{ justifyContent: "center" }}>
           How It Works
@@ -330,7 +318,6 @@ export default function ReceiverPortal() {
         </div>
       </div>
 
-      {/* Bluetooth Verification Section */}
       <div className="card verification-card">
         <div className="verification-content">
           <div className="flex items-start gap-4">
@@ -347,10 +334,15 @@ export default function ReceiverPortal() {
               <Bluetooth size={20} />
             </div>
             <div className="verification-text">
-              <h2 className="text-lg font-bold text-white mb-2">Bluetooth Verification</h2>
-              <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }}>
-                Verify which packages are physically present using Bluetooth scanning.
-                The Master ESP32 will scan all slave devices to detect your packages in real-time.
+              <h2 className="text-lg font-bold text-white mb-2">
+                Bluetooth Verification
+              </h2>
+              <p
+                style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }}
+              >
+                Verify which packages are physically present using Bluetooth
+                scanning. The Master ESP32 will scan all slave devices to
+                detect your packages in real-time.
               </p>
               <div className="flex flex-wrap gap-2 mt-3">
                 <span className="badge badge-present">
@@ -372,7 +364,10 @@ export default function ReceiverPortal() {
                 style={{ background: "rgba(34, 197, 94, 0.1)" }}
               >
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-500"></div>
-                <span className="text-sm font-medium" style={{ color: "var(--color-success)" }}>
+                <span
+                  className="text-sm font-medium"
+                  style={{ color: "var(--color-success)" }}
+                >
                   Scanning...
                 </span>
               </div>
@@ -383,14 +378,16 @@ export default function ReceiverPortal() {
               className="btn-primary flex items-center gap-2"
               style={{ boxShadow: "0 4px 15px rgba(59, 130, 246, 0.4)" }}
             >
-              <Radio size={18} className={isScanning ? "animate-pulse" : ""} />
+              <Radio
+                size={18}
+                className={isScanning ? "animate-pulse" : ""}
+              />
               {isScanning ? "Scanning..." : "Verify Bluetooth"}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Product List */}
       <ProductList
         products={myProducts}
         onMarkReceived={handleMarkReceived}
@@ -399,4 +396,3 @@ export default function ReceiverPortal() {
     </div>
   );
 }
-

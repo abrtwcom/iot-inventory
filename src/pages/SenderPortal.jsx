@@ -7,11 +7,9 @@ import ShipmentForm from "../components/sender/ShipmentForm";
 import ShipmentList from "../components/sender/ShipmentList";
 import {
   Package,
-  ArrowRight,
   Plus,
   Truck,
   CheckCircle,
-  Clock,
   TrendingUp,
   MapPin,
   Bluetooth,
@@ -23,7 +21,6 @@ export default function SenderPortal() {
   const { createProduct } = useProducts();
   const [shipments, setShipments] = useState([]);
 
-  // Get all products and filter by sender
   const { data: allProducts } = useRealtimeData("products");
 
   useEffect(() => {
@@ -37,7 +34,6 @@ export default function SenderPortal() {
       const myShipments = allProducts.filter(
         (p) => p.sender_email === user.email
       );
-      // Sort by shipment_date descending
       myShipments.sort(
         (a, b) =>
           new Date(b.shipment_date || b.created_date) -
@@ -82,7 +78,6 @@ export default function SenderPortal() {
 
   return (
     <div className="page-container portal-container">
-      {/* Header */}
       <div className="header-section">
         <div
           className="icon-wrapper mx-auto mb-4"
@@ -96,10 +91,12 @@ export default function SenderPortal() {
           <Package size={28} />
         </div>
         <h1 className="portal-title">Sender Portal</h1>
-        <p className="portal-description">Create shipments, track packages, and manage your logistics with real-time IoT tracking</p>
+        <p className="portal-description">
+          Create shipments, track packages, and manage your logistics with
+          real-time IoT tracking
+        </p>
       </div>
 
-      {/* Stats */}
       <div className="portal-stats-grid">
         <div className="stats-card">
           <div className="number">{stats.total}</div>
@@ -128,7 +125,6 @@ export default function SenderPortal() {
         </div>
       </div>
 
-      {/* How It Works */}
       <div className="card how-it-works-card">
         <h2 className="section-title" style={{ justifyContent: "center" }}>
           How It Works
@@ -183,7 +179,6 @@ export default function SenderPortal() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="portal-content-grid">
         <ShipmentForm onSubmit={handleCreateShipment} currentUser={user} />
         <ShipmentList shipments={shipments} />
@@ -191,4 +186,3 @@ export default function SenderPortal() {
     </div>
   );
 }
-

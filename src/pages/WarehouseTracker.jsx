@@ -8,7 +8,6 @@ import { Warehouse, Bluetooth, Activity, RefreshCw } from "lucide-react";
 export default function WarehouseTracker() {
   const [autoRefresh, setAutoRefresh] = useState(true);
 
-  // Real-time data subscriptions
   const { data: scanner, loading: scannersLoading } = useRealtimeData(
     "warehouse/scanner",
     { enabled: autoRefresh }
@@ -32,14 +31,12 @@ export default function WarehouseTracker() {
     enabled: autoRefresh,
   });
 
-  // Calculate stats
   const totalDetections = detections?.length || 0;
   const presentDevices = currentStatus?.filter((s) => s.present).length || 0;
   const totalDevices = currentStatus?.length || 0;
 
   return (
     <div className="page-container portal-container">
-      {/* Header */}
       <div className="header-section">
         <div
           className="icon-wrapper mx-auto mb-4"
@@ -53,10 +50,11 @@ export default function WarehouseTracker() {
           <Warehouse size={28} />
         </div>
         <h1 className="portal-title">Warehouse Tracker</h1>
-        <p className="portal-description">Real-time BLE detection monitoring for your warehouse operations</p>
+        <p className="portal-description">
+          Real-time BLE detection monitoring for your warehouse operations
+        </p>
       </div>
 
-      {/* Stats */}
       <div className="warehouse-stats-grid">
         <div className="stats-card">
           <div className="number">{totalDevices}</div>
@@ -85,22 +83,22 @@ export default function WarehouseTracker() {
         </div>
       </div>
 
-      {/* Auto-refresh toggle */}
       <div className="flex justify-center mb-6">
         <button
           onClick={() => setAutoRefresh(!autoRefresh)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-            autoRefresh
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${autoRefresh
               ? "bg-[var(--color-primary)] text-white"
               : "bg-[var(--color-card)] text-gray-300 border border-[var(--divider)]"
-          }`}
+            }`}
         >
-          <RefreshCw size={16} className={autoRefresh ? "animate-spin" : ""} />
+          <RefreshCw
+            size={16}
+            className={autoRefresh ? "animate-spin" : ""}
+          />
           {autoRefresh ? "Auto-refresh On" : "Auto-refresh Off"}
         </button>
       </div>
 
-      {/* Components */}
       <div className="warehouse-content">
         <div className="card">
           <ScannerStatus scanner={scanner} loading={scannersLoading} />
@@ -111,10 +109,12 @@ export default function WarehouseTracker() {
         </div>
 
         <div className="card">
-          <DetectionHistory detections={detections} loading={detectionsLoading} />
+          <DetectionHistory
+            detections={detections}
+            loading={detectionsLoading}
+          />
         </div>
       </div>
     </div>
   );
 }
-

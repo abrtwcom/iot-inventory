@@ -16,7 +16,6 @@ export default function DetectionCards({ detections, products }) {
     );
   }
 
-  // Get unique device names from recent detections
   const recentDetections = detections.slice(0, 20);
   const deviceMap = new Map();
 
@@ -34,7 +33,6 @@ export default function DetectionCards({ detections, products }) {
 
   const detectedDevices = Array.from(deviceMap.values());
 
-  // Match devices with products
   const getProductInfo = (deviceName) => {
     return products?.find((p) => p.device_name === deviceName);
   };

@@ -1,29 +1,28 @@
-import { formatDistanceToNow, format } from 'date-fns';
+import { formatDistanceToNow, format } from "date-fns";
 
 export const formatTimeSince = (timestamp) => {
-  if (!timestamp) return 'Never';
+  if (!timestamp) return "Never";
   try {
     return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
-  } catch{
-    return 'Invalid date';
+  } catch {
+    return "Invalid date";
   }
 };
 
 export const formatDateTime = (timestamp) => {
-  if (!timestamp) return 'N/A';
+  if (!timestamp) return "N/A";
   try {
-    return format(new Date(timestamp), 'PPpp');
+    return format(new Date(timestamp), "PPpp");
   } catch {
-    return 'Invalid date';
+    return "Invalid date";
   }
 };
 
 export const formatDate = (timestamp) => {
-  if (!timestamp) return 'N/A';
+  if (!timestamp) return "N/A";
   try {
-    return format(new Date(timestamp), 'PP');
-  } catch  {
-    return 'Invalid date';
+    return format(new Date(timestamp), "PP");
+  } catch {
+    return "Invalid date";
   }
 };
-

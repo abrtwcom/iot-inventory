@@ -25,7 +25,6 @@ export default function ShipmentForm({ onSubmit }) {
     setSubmitting(true);
     try {
       await onSubmit(formData);
-      // Reset form
       setFormData({
         product_name: "",
         product_id: "",
@@ -57,8 +56,13 @@ export default function ShipmentForm({ onSubmit }) {
           <Plus size={18} className="text-white" />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-white">Create New Shipment</h2>
-          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+          <h2 className="text-lg font-bold text-white">
+            Create New Shipment
+          </h2>
+          <p
+            className="text-xs"
+            style={{ color: "var(--text-secondary)" }}
+          >
             Fill in the details to send a package
           </p>
         </div>
@@ -156,7 +160,9 @@ export default function ShipmentForm({ onSubmit }) {
               <ArrowRight size={14} className="rotate-90" />
             </div>
           </div>
-          <p className="form-hint">Select the ESP32 device attached to this package</p>
+          <p className="form-hint">
+            Select the ESP32 device attached to this package
+          </p>
         </div>
 
         <div className="form-group">

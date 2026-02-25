@@ -13,18 +13,21 @@ export const useRealtimeData = (path, options = {}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Destructure options to properly track dependencies
-  const { enabled = true, orderBy, limitToLast: limit, sortBy, sortDesc } = options;
+  const {
+    enabled = true,
+    orderBy,
+    limitToLast: limit,
+    sortBy,
+    sortDesc,
+  } = options;
 
   useEffect(() => {
-    // Don't subscribe if auto-refresh is disabled
     if (!enabled) {
       return;
     }
 
     let dbRef = ref(database, path);
 
-    // Apply query options
     if (orderBy) {
       dbRef = query(dbRef, orderByChild(orderBy));
     }
@@ -37,13 +40,11 @@ export const useRealtimeData = (path, options = {}) => {
       (snapshot) => {
         const val = snapshot.val();
         if (val) {
-          // Convert object to array with IDs
           const dataArray = Object.entries(val).map(([id, data]) => ({
             id,
             ...data,
           }));
 
-          // Sort if needed
           if (sortBy) {
             dataArray.sort((a, b) => {
               const aVal = a[sortBy];

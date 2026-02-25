@@ -1,4 +1,4 @@
-import { Clock, Signal, Package } from "lucide-react";
+import { Clock, Signal, Package, History } from "lucide-react";
 import { formatDateTime } from "../../utils/formatters";
 
 export default function DetectionHistory({ detections, loading }) {
@@ -34,7 +34,6 @@ export default function DetectionHistory({ detections, loading }) {
     );
   }
 
-  // Get latest detection for each device
   const deviceMap = new Map();
   detections.forEach((detection) => {
     if (!detection.deviceName) return;
@@ -88,17 +87,18 @@ export default function DetectionHistory({ detections, loading }) {
                       size={16}
                       className="text-gray-400 dark:text-gray-500"
                     />
-                    <span className="font-medium">{detection.deviceName}</span>
+                    <span className="font-medium">
+                      {detection.deviceName}
+                    </span>
                   </div>
                 </td>
                 <td className="py-3">{detection.deviceName}</td>
                 <td className="py-3">
                   <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      detection.present
+                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${detection.present
                         ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
                         : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                    }`}
+                      }`}
                   >
                     {detection.present ? "✓ Present" : "✗ Not Present"}
                   </span>

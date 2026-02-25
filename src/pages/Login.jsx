@@ -1,63 +1,62 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { Mail, Lock, UserPlus, LogIn as LoginIcon } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { Mail, Lock, UserPlus, LogIn as LoginIcon } from "lucide-react";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [mode, setMode] = useState('signin'); // 'signin' | 'signup'
-  const [role, setRole] = useState('receiver');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [mode, setMode] = useState("signin");
+  const [role, setRole] = useState("receiver");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login, signup, loginWithGoogle, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate("/");
     }
   }, [user, navigate]);
 
-  // Helper to map Firebase error codes to user-friendly messages
   const getErrorMessage = (error) => {
-    console.error("Auth Error:", error); // Keep logging for debugging
+    console.error("Auth Error:", error);
     switch (error.code) {
-      case 'auth/invalid-email':
-        return 'Please enter a valid email address.';
-      case 'auth/user-disabled':
-        return 'This account has been disabled.';
-      case 'auth/user-not-found':
-        return 'No account found with this email.';
-      case 'auth/wrong-password':
-      case 'auth/invalid-credential':
-        return 'Incorrect password or credentials.';
-      case 'auth/email-already-in-use':
-        return 'An account with this email already exists.';
-      case 'auth/weak-password':
-        return 'Password should be at least 6 characters.';
-      case 'auth/operation-not-allowed':
-        return 'This sign-in method is not enabled.';
-      case 'auth/popup-closed-by-user':
-        return 'Sign-in popup was closed before completion.';
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/user-disabled":
+        return "This account has been disabled.";
+      case "auth/user-not-found":
+        return "No account found with this email.";
+      case "auth/wrong-password":
+      case "auth/invalid-credential":
+        return "Incorrect password or credentials.";
+      case "auth/email-already-in-use":
+        return "An account with this email already exists.";
+      case "auth/weak-password":
+        return "Password should be at least 6 characters.";
+      case "auth/operation-not-allowed":
+        return "This sign-in method is not enabled.";
+      case "auth/popup-closed-by-user":
+        return "Sign-in popup was closed before completion.";
       default:
-        return 'An unexpected error occurred. Please try again.';
+        return "An unexpected error occurred. Please try again.";
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
-      if (mode === 'signin') {
+      if (mode === "signin") {
         await login(email, password);
       } else {
         await signup(email, password, { fullName, role });
       }
-      navigate('/');
+      navigate("/");
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
@@ -66,11 +65,11 @@ export default function Login() {
   };
 
   const handleGoogle = async () => {
-    setError('');
+    setError("");
     setLoading(true);
     try {
       await loginWithGoogle(role);
-      navigate('/');
+      navigate("/");
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
@@ -82,8 +81,14 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-          <p className="text-gray-600">{mode === 'signin' ? 'Sign in to WareHub' : 'Create your account'}</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Welcome Back
+          </h1>
+          <p className="text-gray-600">
+            {mode === "signin"
+              ? "Sign in to WareHub"
+              : "Create your account"}
+          </p>
         </div>
 
         {error && (
@@ -95,22 +100,28 @@ export default function Login() {
         <div className="grid grid-cols-2 gap-2 mb-6">
           <button
             type="button"
-            onClick={() => setMode('signin')}
-            className={`py-2 rounded-lg border text-sm font-medium ${mode === 'signin' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'}`}
+            onClick={() => setMode("signin")}
+            className={`py-2 rounded-lg border text-sm font-medium ${mode === "signin"
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-gray-700 border-gray-300"
+              }`}
           >
             Sign In
           </button>
           <button
             type="button"
-            onClick={() => setMode('signup')}
-            className={`py-2 rounded-lg border text-sm font-medium ${mode === 'signup' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'}`}
+            onClick={() => setMode("signup")}
+            className={`py-2 rounded-lg border text-sm font-medium ${mode === "signup"
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-gray-700 border-gray-300"
+              }`}
           >
             Sign Up
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {mode === 'signup' && (
+          {mode === "signup" && (
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                 Full Name
@@ -160,23 +171,33 @@ export default function Login() {
               I am a
             </label>
             <div className="grid grid-cols-2 gap-4">
-              <label className={`flex items-center justify-center px-4 py-3 border rounded-lg cursor-pointer transition-all ${role === 'sender' ? 'bg-blue-50 border-blue-500 text-blue-700 font-medium ring-1 ring-blue-500' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+              <label
+                className={`flex items-center justify-center px-4 py-3 border rounded-lg cursor-pointer transition-all ${role === "sender"
+                    ? "bg-blue-50 border-blue-500 text-blue-700 font-medium ring-1 ring-blue-500"
+                    : "border-gray-200 text-gray-600 hover:bg-gray-50"
+                  }`}
+              >
                 <input
                   type="radio"
                   name="role"
                   value="sender"
-                  checked={role === 'sender'}
+                  checked={role === "sender"}
                   onChange={(e) => setRole(e.target.value)}
                   className="hidden"
                 />
                 Sender
               </label>
-              <label className={`flex items-center justify-center px-4 py-3 border rounded-lg cursor-pointer transition-all ${role === 'receiver' ? 'bg-blue-50 border-blue-500 text-blue-700 font-medium ring-1 ring-blue-500' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+              <label
+                className={`flex items-center justify-center px-4 py-3 border rounded-lg cursor-pointer transition-all ${role === "receiver"
+                    ? "bg-blue-50 border-blue-500 text-blue-700 font-medium ring-1 ring-blue-500"
+                    : "border-gray-200 text-gray-600 hover:bg-gray-50"
+                  }`}
+              >
                 <input
                   type="radio"
                   name="role"
                   value="receiver"
-                  checked={role === 'receiver'}
+                  checked={role === "receiver"}
                   onChange={(e) => setRole(e.target.value)}
                   className="hidden"
                 />
@@ -190,8 +211,18 @@ export default function Login() {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
           >
-            {mode === 'signin' ? <LoginIcon size={20} /> : <UserPlus size={20} />}
-            {loading ? (mode === 'signin' ? 'Signing in...' : 'Creating account...') : (mode === 'signin' ? 'Sign In' : 'Sign Up')}
+            {mode === "signin" ? (
+              <LoginIcon size={20} />
+            ) : (
+              <UserPlus size={20} />
+            )}
+            {loading
+              ? mode === "signin"
+                ? "Signing in..."
+                : "Creating account..."
+              : mode === "signin"
+                ? "Sign In"
+                : "Sign Up"}
           </button>
         </form>
 
@@ -226,4 +257,3 @@ export default function Login() {
     </div>
   );
 }
-

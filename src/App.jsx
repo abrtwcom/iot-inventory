@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/layout/Layout';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import WarehouseTracker from './pages/WarehouseTracker';
-import SenderPortal from './pages/SenderPortal';
-import ReceiverPortal from './pages/ReceiverPortal';
-import { useAuth } from './hooks/useAuth';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import WarehouseTracker from "./pages/WarehouseTracker";
+import SenderPortal from "./pages/SenderPortal";
+import ReceiverPortal from "./pages/ReceiverPortal";
+import { useAuth } from "./hooks/useAuth";
 
 function ProtectedRoute({ children, allowedRoles = [] }) {
   const { user, loading } = useAuth();
@@ -26,9 +26,9 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
   }
 
   if (allowedRoles.length > 0) {
-    const hasRequiredRole = user.role === 'admin' || allowedRoles.includes(user.role);
+    const hasRequiredRole =
+      user.role === "admin" || allowedRoles.includes(user.role);
     if (!hasRequiredRole) {
-      // Redirect to home if role not authorized
       return <Navigate to="/" replace />;
     }
   }
@@ -43,14 +43,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route
-            path="warehouse"
-            element={<WarehouseTracker />}
-          />
+          <Route path="warehouse" element={<WarehouseTracker />} />
           <Route
             path="sender"
             element={
-              <ProtectedRoute allowedRoles={['sender', 'admin']}>
+              <ProtectedRoute allowedRoles={["sender", "admin"]}>
                 <SenderPortal />
               </ProtectedRoute>
             }
@@ -58,7 +55,7 @@ function App() {
           <Route
             path="receiver"
             element={
-              <ProtectedRoute allowedRoles={['receiver', 'admin']}>
+              <ProtectedRoute allowedRoles={["receiver", "admin"]}>
                 <ReceiverPortal />
               </ProtectedRoute>
             }

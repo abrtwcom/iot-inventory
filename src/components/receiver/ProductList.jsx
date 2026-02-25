@@ -1,4 +1,12 @@
-import { Package, Calendar, CheckCircle2, XCircle, Clock, User, Tag } from "lucide-react";
+import {
+  Package,
+  Calendar,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  User,
+  Tag,
+} from "lucide-react";
 import { formatDateTime } from "../../utils/formatters";
 import StatusBadge from "../common/StatusBadge";
 
@@ -23,7 +31,6 @@ export default function ProductList({
     );
   }
 
-  // Filter to only show products for this receiver that are not irrelevant
   const filteredProducts = products.filter(
     (p) => p.receiver_email === currentUserEmail && p.status !== "irrelevant"
   );
@@ -98,16 +105,22 @@ export default function ProductList({
                 </div>
                 <div className="card-info-item">
                   <User size={12} />
-                  <span>From: {product.sender_name || product.sender_email}</span>
+                  <span>
+                    From: {product.sender_name || product.sender_email}
+                  </span>
                 </div>
                 <div className="card-info-item">
                   <Calendar size={12} />
-                  <span>Shipped: {formatDateTime(product.shipment_date)}</span>
+                  <span>
+                    Shipped: {formatDateTime(product.shipment_date)}
+                  </span>
                 </div>
                 {product.received_date && (
                   <div className="card-info-item received">
                     <CheckCircle2 size={12} />
-                    <span>Received: {formatDateTime(product.received_date)}</span>
+                    <span>
+                      Received: {formatDateTime(product.received_date)}
+                    </span>
                   </div>
                 )}
               </div>

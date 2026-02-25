@@ -1,7 +1,14 @@
-import { useState, useEffect } from 'react';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { ref, get, set } from 'firebase/database';
-import { auth, database } from '../firebase/config';
+import { useState, useEffect } from "react";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { ref, get, set } from "firebase/database";
+import { auth, database } from "../firebase/config";
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);
@@ -10,26 +17,29 @@ export const useAuth = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Get user data from database
         try {
           const userRef = ref(database, `users/${firebaseUser.uid}`);
           const snapshot = await get(userRef);
           const userData = snapshot.val() || {};
-          const forcedRole = firebaseUser.email === 'admin@gmail.com' ? 'admin' : userData.role;
+          const forcedRole =
+            firebaseUser.email === "admin@gmail.com"
+              ? "admin"
+              : userData.role;
 
           setUser({
             uid: firebaseUser.uid,
             email: firebaseUser.email,
             ...userData,
-            role: forcedRole
+            role: forcedRole,
           });
         } catch (error) {
-          console.error('Error fetching user data:', error);
-          const forcedRole = firebaseUser.email === 'admin@gmail.com' ? 'admin' : null;
+          console.error("Error fetching user data:", error);
+          const forcedRole =
+            firebaseUser.email === "admin@gmail.com" ? "admin" : null;
           setUser({
             uid: firebaseUser.uid,
             email: firebaseUser.email,
-            role: forcedRole
+            role: forcedRole,
           });
         }
       } else {
@@ -50,7 +60,8 @@ export const useAuth = () => {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     const uid = cred.user.uid;
     const userRef = ref(database, `users/${uid}`);
-    const userRole = email === 'admin@gmail.com' ? 'admin' : (role || 'receiver');
+    const userRole =
+      email === "admin@gmail.com" ? "admin" : role || "receiver";
     await set(userRef, {
       email,
       full_name: fullName || email,
@@ -60,17 +71,16 @@ export const useAuth = () => {
     return cred.user;
   };
 
-  const loginWithGoogle = async (role = 'receiver') => {
+  const loginWithGoogle = async (role = "receiver") => {
     const provider = new GoogleAuthProvider();
-    // Optional: restrict to your web client ID audience if needed
     const result = await signInWithPopup(auth, provider);
     const { user: gUser } = result;
 
-    // Ensure a DB record exists
     const userRef = ref(database, `users/${gUser.uid}`);
     const snap = await get(userRef);
     if (!snap.exists()) {
-      const userRole = gUser.email === 'admin@gmail.com' ? 'admin' : role;
+      const userRole =
+        gUser.email === "admin@gmail.com" ? "admin" : role;
       await set(userRef, {
         email: gUser.email,
         full_name: gUser.displayName || gUser.email,
@@ -87,4 +97,3 @@ export const useAuth = () => {
 
   return { user, loading, login, signup, loginWithGoogle, logout };
 };
-
